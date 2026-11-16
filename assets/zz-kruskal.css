@@ -1,0 +1,644 @@
+/* GraphLab UV - Kruskal: visualizacion principal y seguimiento sincronizado.
+   Solo afecta la pagina de Kruskal; las demas paginas no se modifican. */
+
+/* Comprimir la cabecera exclusivamente al abrir Kruskal, para dar altura al grafo. */
+.graphlab-app:has(.pagina-kruskal) .graphlab-encabezado {
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.graphlab-app:has(.pagina-kruskal) .graphlab-sobretitulo,
+.graphlab-app:has(.pagina-kruskal) .graphlab-subtitulo {
+    display: none;
+}
+
+.graphlab-app:has(.pagina-kruskal) .graphlab-titulo {
+    margin: 0;
+    font-size: 1.55rem;
+    line-height: 1.2;
+}
+
+.graphlab-app:has(.pagina-kruskal) .graphlab-navegacion {
+    padding-top: 6px;
+    padding-bottom: 6px;
+}
+
+.graphlab-app:has(.pagina-kruskal) .graphlab-nav-boton {
+    padding-top: 8px;
+    padding-bottom: 8px;
+}
+
+.graphlab-app:has(.pagina-kruskal) .graphlab-contenido {
+    padding-top: 12px;
+    padding-bottom: 18px;
+}
+
+.pagina-kruskal {
+    --gl-kr-borde: #dce5ec;
+}
+
+.pagina-kruskal .gl-kr-intro {
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+    gap: 16px;
+    margin-bottom: 14px;
+}
+
+.pagina-kruskal .gl-kr-eyebrow {
+    display: block;
+    color: #47758c;
+    letter-spacing: .10em;
+    font-size: .68rem;
+    font-weight: 800;
+}
+
+.pagina-kruskal .gl-kr-intro h2 {
+    margin: 3px 0 3px;
+    font-size: clamp(1.30rem, 1.6vw, 1.65rem);
+    line-height: 1.2;
+    font-weight: 760;
+}
+
+.pagina-kruskal .gl-kr-intro p {
+    margin: 0;
+    color: #617386;
+    font-size: .89rem;
+}
+
+.pagina-kruskal .gl-kr-etiquetas {
+    display: flex;
+    gap: 7px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+}
+
+.pagina-kruskal .gl-kr-etiquetas span {
+    white-space: nowrap;
+    background: #eaf0f4;
+    border: 1px solid #d3e0e9;
+    border-radius: 50px;
+    color: #496779;
+    font-size: .75rem;
+    font-weight: 600;
+    padding: 5px 10px;
+}
+
+.pagina-kruskal .gl-kr-distribucion {
+    display: grid;
+    grid-template-columns: minmax(0, 1.75fr) minmax(340px, 1fr);
+    gap: 16px;
+    align-items: start;
+}
+
+.pagina-kruskal .gl-kr-tarjeta {
+    min-width: 0;
+    border: 1px solid var(--gl-kr-borde);
+    background: #fff;
+    border-radius: 15px;
+    box-shadow: 0 5px 18px rgba(35, 55, 76, .05);
+}
+
+.pagina-kruskal .gl-kr-panel-grafo {
+    padding: 16px 17px 14px;
+}
+
+.pagina-kruskal .gl-kr-grafo-cabecera {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.pagina-kruskal .gl-kr-grafo-cabecera h3 {
+    margin: 0;
+    font-size: 1.05rem;
+    font-weight: 740;
+}
+
+.pagina-kruskal .gl-kr-grafo-cabecera p {
+    margin: 2px 0 0;
+    color: #7c8a97;
+    font-size: .75rem;
+}
+
+.pagina-kruskal .gl-kr-switch {
+    margin: 0;
+    color: #526b7d;
+    font-size: .78rem;
+}
+
+.pagina-kruskal .gl-kr-switch .form-check {
+    margin-bottom: 0;
+}
+
+.pagina-kruskal .gl-kr-switch .form-check-input:checked {
+    background-color: #416b86;
+    border-color: #416b86;
+}
+
+.pagina-kruskal .gl-kr-grafo {
+    height: clamp(315px, 45dvh, 440px) !important;
+    width: 100%;
+    min-height: 0;
+    margin-top: 0;
+    border: 1px solid #edf2f6;
+    border-radius: 11px;
+    background: #fbfcfe;
+    overflow: hidden;
+}
+
+.pagina-kruskal .gl-kr-leyenda {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 7px 16px;
+    margin-top: 9px;
+    color: #637487;
+    font-size: .76rem;
+}
+
+.pagina-kruskal .gl-kr-leyenda>span {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.pagina-kruskal .gl-kr-punto {
+    width: 9px;
+    height: 9px;
+    display: inline-block;
+    border-radius: 50%;
+}
+
+.pagina-kruskal .gl-kr-punto-verde {
+    background: #238a80;
+}
+
+.pagina-kruskal .gl-kr-punto-rojo {
+    background: #ca5962;
+}
+
+.pagina-kruskal .gl-kr-punto-gris {
+    background: #aebdcc;
+}
+
+.pagina-kruskal .gl-kr-inspeccion {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 4px 12px;
+    margin-top: 7px;
+    font-size: .76rem;
+}
+
+.pagina-kruskal .gl-kr-ayuda {
+    color: #8896a4;
+}
+
+.pagina-kruskal .gl-kr-detalle {
+    color: #466981;
+    font-weight: 600;
+}
+
+.pagina-kruskal .gl-kr-controles {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    padding-top: 14px;
+    margin-top: 12px;
+    border-top: 1px solid #e7edf2;
+}
+
+.pagina-kruskal .gl-kr-avance {
+    flex: 1 1 110px;
+    max-width: 185px;
+}
+
+.pagina-kruskal .gl-kr-avance strong {
+    display: block;
+    color: #3d5970;
+    font-size: .80rem;
+}
+
+.pagina-kruskal .gl-kr-progreso-pista {
+    height: 5px;
+    background: #e7eef3;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-top: 7px;
+}
+
+.pagina-kruskal .gl-kr-progreso-valor {
+    height: 100%;
+    background: #238a80;
+    border-radius: 10px;
+    transition: width .18s ease;
+}
+
+.pagina-kruskal .gl-kr-botones {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+}
+
+.pagina-kruskal .gl-kr-botones .btn {
+    font-size: .85rem;
+    font-weight: 640;
+    border-radius: 8px;
+    padding: 7px 12px;
+}
+
+.pagina-kruskal .gl-kr-panel-estado {
+    padding: 17px 18px 16px;
+}
+
+.pagina-kruskal .gl-kr-decision-resumen {
+    display: grid;
+    grid-template-columns: 1fr .6fr auto;
+    align-items: center;
+    gap: 10px;
+    padding: 12px;
+    background: #f3f7f9;
+    border: 1px solid #e2ebf1;
+    border-radius: 10px;
+    margin-top: 8px;
+}
+
+.pagina-kruskal .gl-kr-mini-etiqueta {
+    display: block;
+    color: #748598;
+    font-size: .72rem;
+    font-weight: 550;
+}
+
+.pagina-kruskal .gl-kr-arista-actual {
+    display: block;
+    font-size: 1.43rem;
+    color: #263f54;
+    line-height: 1.25;
+}
+
+.pagina-kruskal .gl-kr-peso-arista {
+    display: block;
+    font-size: 1.25rem;
+    color: #263f54;
+    line-height: 1.3;
+}
+
+.pagina-kruskal .gl-kr-estado {
+    border-radius: 50px;
+    padding: 5px 9px;
+    white-space: nowrap;
+    font-weight: 700;
+    font-size: .72rem;
+}
+
+.pagina-kruskal .gl-kr-estado-neutro {
+    background: #e4edf3;
+    color: #546a79;
+}
+
+.pagina-kruskal .gl-kr-estado-aceptada {
+    background: #ddf2ed;
+    color: #176c5a;
+}
+
+.pagina-kruskal .gl-kr-estado-rechazada {
+    background: #fce8e9;
+    color: #aa3545;
+}
+
+.pagina-kruskal .gl-kr-mensaje {
+    margin: 11px 0 13px;
+    color: #52677a;
+    line-height: 1.5;
+    font-size: .88rem;
+    min-height: 2.5em;
+}
+
+.pagina-kruskal .gl-kr-metricas {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.pagina-kruskal .gl-kr-metricas>div {
+    background: #f8fafb;
+    border: 1px solid #e7eef2;
+    border-radius: 9px;
+    padding: 11px;
+}
+
+.pagina-kruskal .gl-kr-metricas strong {
+    display: block;
+    font-size: 1.35rem;
+    line-height: 1.25;
+    color: #244f69;
+    margin-top: 2px;
+}
+
+.pagina-kruskal .gl-kr-seccion {
+    border-top: 1px solid #e7edf2;
+    margin-top: 14px;
+    padding-top: 13px;
+}
+
+.pagina-kruskal .gl-kr-seccion h4 {
+    margin: 0 0 9px;
+    font-size: .89rem;
+    font-weight: 740;
+}
+
+.pagina-kruskal .gl-kr-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    min-height: 30px;
+    align-items: start;
+}
+
+.pagina-kruskal .gl-kr-arista-chip {
+    display: inline-block;
+    font-size: .77rem;
+    font-weight: 650;
+    color: #226f64;
+    background: #e8f6f2;
+    border: 1px solid #cde9e0;
+    border-radius: 7px;
+    padding: 5px 8px;
+}
+
+.pagina-kruskal .gl-kr-componente-chip {
+    display: inline-block;
+    font-size: .77rem;
+    color: #3c5f75;
+    background: #eef3f7;
+    border: 1px solid #e0e8ef;
+    border-radius: 7px;
+    padding: 5px 8px;
+}
+
+.pagina-kruskal .gl-kr-vacio {
+    color: #8a96a1;
+    font-size: .80rem;
+    font-style: italic;
+}
+
+.pagina-kruskal .gl-kr-conclusion {
+    background: #edf7f4;
+    border: 1px solid #c8e9df;
+    border-radius: 10px;
+    padding: 11px 12px;
+    margin-top: 16px;
+}
+
+.pagina-kruskal .gl-kr-conclusion h4 {
+    color: #176859;
+    margin: 0 0 6px;
+    font-size: .90rem;
+    font-weight: 750;
+}
+
+.pagina-kruskal .gl-kr-conclusion p {
+    font-size: .81rem;
+    color: #3a695e;
+    line-height: 1.45;
+    margin: 0 0 9px;
+}
+
+.pagina-kruskal .gl-kr-conclusion-metricas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 12px;
+    font-size: .78rem;
+    font-weight: 650;
+    color: #287365;
+}
+
+.pagina-kruskal .gl-kr-conclusion-peso {
+    color: #145f52;
+    font-weight: 800;
+}
+
+.pagina-kruskal .gl-kr-desplegable {
+    border-top: 1px solid #e7edf2;
+    margin-top: 14px;
+    padding-top: 12px;
+}
+
+.pagina-kruskal .gl-kr-desplegable summary {
+    cursor: pointer;
+    color: #365f78;
+    font-size: .84rem;
+    font-weight: 680;
+}
+
+.pagina-kruskal .gl-kr-desplegable summary:hover {
+    color: #214960;
+}
+
+.pagina-kruskal .gl-kr-tabla-ayuda {
+    margin: 9px 0 6px;
+    color: #81909c;
+    font-size: .76rem;
+}
+
+.pagina-kruskal .gl-kr-tabla-contenedor {
+    max-height: 205px;
+    overflow-y: auto;
+    margin-top: 7px;
+    border: 1px solid #e4ecf1;
+    border-radius: 9px;
+}
+
+.pagina-kruskal .gl-kr-tabla {
+    margin: 0;
+    font-size: .78rem;
+}
+
+.pagina-kruskal .gl-kr-tabla thead {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}
+
+.pagina-kruskal .gl-kr-tabla th,
+.pagina-kruskal .gl-kr-tabla td {
+    padding: 6px 8px;
+    border-color: #e8edf2;
+}
+
+.pagina-kruskal .gl-kr-tabla .gl-kr-fila-actual td {
+    background: #e6f2ed;
+    color: #196b5e;
+    font-weight: 760;
+}
+
+.pagina-kruskal .gl-kr-tabla .gl-kr-fila-rechazada td {
+    color: #9b727a;
+}
+
+.pagina-kruskal .gl-kr-nota {
+    margin: 11px 2px 0;
+    color: #8a98a5;
+    font-size: .75rem;
+}
+
+@media (max-width: 1150px) {
+    .pagina-kruskal .gl-kr-distribucion {
+        grid-template-columns: minmax(0, 1.35fr) minmax(310px, 1fr);
+    }
+
+    .pagina-kruskal .gl-kr-intro {
+        align-items: start;
+    }
+
+    .pagina-kruskal .gl-kr-etiquetas {
+        display: none;
+    }
+}
+
+@media (max-width: 880px) {
+    .pagina-kruskal .gl-kr-distribucion {
+        grid-template-columns: 1fr;
+    }
+
+    .pagina-kruskal .gl-kr-grafo {
+        height: clamp(280px, 52vw, 420px) !important;
+    }
+}
+
+@media (max-width: 540px) {
+
+    .pagina-kruskal .gl-kr-panel-grafo,
+    .pagina-kruskal .gl-kr-panel-estado {
+        padding: 12px;
+    }
+
+    .pagina-kruskal .gl-kr-grafo-cabecera {
+        align-items: start;
+    }
+
+    .pagina-kruskal .gl-kr-controles {
+        align-items: stretch;
+    }
+
+    .pagina-kruskal .gl-kr-avance {
+        max-width: none;
+    }
+
+    .pagina-kruskal .gl-kr-botones {
+        width: 100%;
+    }
+
+    .pagina-kruskal .gl-kr-botones .btn {
+        flex: 1 1 auto;
+    }
+
+    .pagina-kruskal .gl-kr-decision-resumen {
+        grid-template-columns: 1fr .6fr;
+    }
+
+    .pagina-kruskal .gl-kr-estado {
+        grid-column: 1 / -1;
+        justify-self: start;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .pagina-kruskal .gl-kr-progreso-valor {
+        transition: none;
+    }
+}
+
+
+/* Consulta de pesos por hover: tarjeta superpuesta, sin etiquetas sobre aristas. */
+.pagina-kruskal .gl-kr-grafo-marco {
+    position: relative;
+    margin-top: 8px;
+    min-width: 0;
+}
+
+.pagina-kruskal .gl-kr-tooltip-arista {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    z-index: 5;
+    min-width: 150px;
+    max-width: calc(100% - 30px);
+    padding: 10px 13px 11px;
+    color: #f8fbfd;
+    background: rgba(31, 55, 74, .97);
+    border: 1px solid rgba(255, 255, 255, .17);
+    border-radius: 10px;
+    box-shadow: 0 8px 22px rgba(28, 51, 70, .17);
+    pointer-events: none;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(5px);
+    transition: opacity .14s ease, transform .14s ease, visibility .14s ease;
+}
+
+.pagina-kruskal .gl-kr-tooltip-visible {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.pagina-kruskal .gl-kr-tooltip-titulo {
+    display: block;
+    margin-bottom: 6px;
+    font-size: .63rem;
+    line-height: 1.1;
+    font-weight: 750;
+    letter-spacing: .1em;
+    color: #bbd1de;
+}
+
+.pagina-kruskal .gl-kr-tooltip-fila {
+    display: flex;
+    gap: 19px;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.pagina-kruskal .gl-kr-tooltip-extremos {
+    font-size: 1.18rem;
+    line-height: 1.2;
+    font-weight: 750;
+    white-space: nowrap;
+}
+
+.pagina-kruskal .gl-kr-tooltip-peso {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 2px;
+}
+
+.pagina-kruskal .gl-kr-tooltip-peso-label {
+    font-size: .65rem;
+    line-height: 1;
+    color: #bbd1de;
+}
+
+.pagina-kruskal .gl-kr-tooltip-peso-valor {
+    font-size: 1.18rem;
+    line-height: 1.15;
+    color: #a5e1d4;
+    font-weight: 750;
+}
+
+.pagina-kruskal .gl-kr-ayuda-hover {
+    margin: 9px 0 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .pagina-kruskal .gl-kr-tooltip-arista {
+        transition: none;
+    }
+}

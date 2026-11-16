@@ -1,0 +1,850 @@
+/* GraphLab UV - Christofides / TSP metrico.
+   Alcance exclusivo: pagina-christofides. No modifica Kruskal ni Doble arbol. */
+
+/* La navegacion queda arriba, igual que en Kruskal y Doble arbol. */
+.graphlab-app:has(.pagina-christofides) .graphlab-encabezado {
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.graphlab-app:has(.pagina-christofides) .graphlab-sobretitulo,
+.graphlab-app:has(.pagina-christofides) .graphlab-subtitulo {
+    display: none;
+}
+
+.graphlab-app:has(.pagina-christofides) .graphlab-titulo {
+    margin: 0;
+    font-size: 1.55rem;
+    line-height: 1.2;
+}
+
+.graphlab-app:has(.pagina-christofides) .graphlab-navegacion {
+    padding-top: 6px;
+    padding-bottom: 6px;
+}
+
+.graphlab-app:has(.pagina-christofides) .graphlab-nav-boton {
+    padding-top: 8px;
+    padding-bottom: 8px;
+}
+
+.graphlab-app:has(.pagina-christofides) .graphlab-contenido {
+    padding-top: 12px;
+    padding-bottom: 18px;
+}
+
+.pagina-christofides {
+    --gl-ch-linea: #dce5ec;
+    --gl-ch-azul: #416b86;
+    --gl-ch-verde: #238a80;
+    --gl-ch-violeta: #6860a5;
+}
+
+.pagina-christofides .gl-ch-intro {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 12px;
+}
+
+.pagina-christofides .gl-ch-eyebrow {
+    display: block;
+    color: #47758c;
+    letter-spacing: .10em;
+    font-size: .68rem;
+    font-weight: 800;
+}
+
+.pagina-christofides .gl-ch-intro h2 {
+    margin: 3px 0 3px;
+    font-size: clamp(1.3rem, 1.65vw, 1.7rem);
+    line-height: 1.2;
+    font-weight: 760;
+}
+
+.pagina-christofides .gl-ch-intro p {
+    margin: 0;
+    color: #617386;
+    font-size: .89rem;
+}
+
+.pagina-christofides .gl-ch-etiquetas {
+    display: flex;
+    gap: 7px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+}
+
+.pagina-christofides .gl-ch-etiquetas span {
+    white-space: nowrap;
+    background: #eaf0f4;
+    border: 1px solid #d3e0e9;
+    border-radius: 50px;
+    color: #496779;
+    font-size: .75rem;
+    font-weight: 600;
+    padding: 5px 10px;
+}
+
+/* Las etapas no son pestanas: muestran progreso dentro del mismo algoritmo. */
+.pagina-christofides .gl-ch-etapas {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin: 0 0 12px;
+}
+
+.pagina-christofides .gl-ch-etapa {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    border: 1px solid #e4ebf0;
+    color: #8a98a5;
+    background: #f7f9fa;
+    border-radius: 8px;
+    font-size: .75rem;
+    line-height: 1.25;
+    font-weight: 650;
+    padding: 7px 10px;
+}
+
+.pagina-christofides .gl-ch-etapa-lista {
+    color: #477e76;
+    background: #edf6f3;
+    border-color: #d8eae4;
+}
+
+.pagina-christofides .gl-ch-etapa-actual {
+    color: #285973;
+    background: #e5eff5;
+    border-color: #b9d2df;
+    box-shadow: inset 0 -2px 0 #416b86;
+}
+
+.pagina-christofides .gl-ch-distribucion {
+    display: grid;
+    grid-template-columns: minmax(0, 1.75fr) minmax(340px, 1fr);
+    gap: 16px;
+    align-items: start;
+}
+
+.pagina-christofides .gl-ch-tarjeta {
+    min-width: 0;
+    background: #fff;
+    border: 1px solid var(--gl-ch-linea);
+    border-radius: 15px;
+    box-shadow: 0 5px 18px rgba(35, 55, 76, .05);
+}
+
+.pagina-christofides .gl-ch-panel-grafo {
+    padding: 16px 17px 14px;
+}
+
+.pagina-christofides .gl-ch-grafo-cabecera {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.pagina-christofides .gl-ch-grafo-cabecera h3 {
+    margin: 0 0 3px;
+    font-size: 1.04rem;
+    font-weight: 740;
+}
+
+.pagina-christofides .gl-ch-grafo-cabecera p {
+    margin: 0;
+    font-size: .76rem;
+    color: #92a0ac;
+}
+
+.pagina-christofides .gl-ch-selector {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+}
+
+.pagina-christofides .gl-ch-selector label {
+    margin: 0;
+    font-size: .79rem;
+    font-weight: 650;
+    color: #5c7181;
+    white-space: nowrap;
+}
+
+.pagina-christofides .gl-ch-selector>div {
+    min-width: 90px;
+    width: 94px;
+}
+
+.pagina-christofides .gl-ch-selector .Select-control {
+    border: 1px solid #cfdae3;
+    border-radius: 8px;
+    background: #f9fbfc;
+}
+
+.pagina-christofides .gl-ch-grafo-marco {
+    position: relative;
+    margin-top: 9px;
+    min-width: 0;
+}
+
+.pagina-christofides .gl-ch-grafo {
+    background: #f8fafc;
+    border: 1px solid #edf1f5;
+    border-radius: 13px;
+    height: clamp(330px, 44vh, 420px) !important;
+    overflow: hidden;
+}
+
+.pagina-christofides .gl-ch-leyenda {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 16px;
+    color: #7c8c9b;
+    font-size: .76rem;
+    margin-top: 10px;
+}
+
+.pagina-christofides .gl-ch-leyenda>span {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.pagina-christofides .gl-ch-punto {
+    display: inline-block;
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+    background: #adbcc7;
+}
+
+.pagina-christofides .gl-ch-punto-verde {
+    background: #238a80;
+}
+
+.pagina-christofides .gl-ch-punto-ambar {
+    background: #c58a35;
+}
+
+.pagina-christofides .gl-ch-punto-rojo {
+    background: #cc6570;
+}
+
+.pagina-christofides .gl-ch-punto-violeta {
+    background: #6860a5;
+}
+
+.pagina-christofides .gl-ch-punto-azul {
+    background: #416b86;
+}
+
+.pagina-christofides .gl-ch-punto-gris {
+    background: #aab9c5;
+}
+
+.pagina-christofides .gl-ch-ayuda {
+    color: #8e9dab;
+    font-size: .76rem;
+    margin: 9px 0 11px;
+}
+
+/* Controles integrados bajo el grafo, sin scroll para localizarlos. */
+.pagina-christofides .gl-ch-controles {
+    border-top: 1px solid #e6edf2;
+    padding-top: 13px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.pagina-christofides .gl-ch-avance {
+    flex: 1 1 170px;
+    max-width: 245px;
+}
+
+.pagina-christofides .gl-ch-avance strong {
+    display: block;
+    font-size: .82rem;
+    font-weight: 720;
+    color: #35566c;
+    margin-bottom: 8px;
+}
+
+.pagina-christofides .gl-ch-progreso-pista {
+    height: 6px;
+    width: 100%;
+    background: #e6eef1;
+    border-radius: 99px;
+    overflow: hidden;
+}
+
+.pagina-christofides .gl-ch-progreso-valor {
+    height: 100%;
+    background: #238a80;
+    border-radius: 99px;
+    transition: width .20s ease;
+}
+
+.pagina-christofides .gl-ch-botones {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 7px;
+}
+
+.pagina-christofides .gl-ch-botones .btn {
+    border-radius: 8px;
+    padding: 7px 11px;
+    font-size: .86rem;
+}
+
+/* El panel derecho explica el estado actual, no el resultado futuro. */
+.pagina-christofides .gl-ch-panel-estado {
+    padding: 19px 20px;
+    max-height: 630px;
+    overflow-y: auto;
+    scrollbar-color: #cedbe3 transparent;
+    scrollbar-width: thin;
+}
+
+.pagina-christofides .gl-ch-estado-titulo {
+    margin: 9px 0 6px;
+    font-size: 1.07rem;
+    line-height: 1.3;
+    font-weight: 755;
+}
+
+.pagina-christofides .gl-ch-mensaje {
+    margin: 0 0 14px;
+    font-size: .86rem;
+    line-height: 1.5;
+    color: #627689;
+}
+
+.pagina-christofides .gl-ch-metricas {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+    padding: 0 0 12px;
+}
+
+.pagina-christofides .gl-ch-metrica {
+    min-width: 0;
+    background: #f8fafb;
+    border: 1px solid #e6edf2;
+    border-radius: 9px;
+    padding: 11px 10px;
+}
+
+.pagina-christofides .gl-ch-metrica-label {
+    display: block;
+    font-size: .70rem;
+    font-weight: 550;
+    color: #728599;
+    line-height: 1.3;
+}
+
+.pagina-christofides .gl-ch-metrica-valor {
+    display: block;
+    color: #285872;
+    font-size: 1.28rem;
+    margin-top: 4px;
+    line-height: 1.25;
+    font-weight: 760;
+}
+
+.pagina-christofides .gl-ch-seccion-titulo {
+    border-top: 1px solid #e8edf1;
+    margin: 8px 0 0;
+    padding-top: 13px;
+    font-size: .88rem;
+    font-weight: 730;
+}
+
+.pagina-christofides .gl-ch-chips,
+.pagina-christofides .gl-ch-secuencia-vertices {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 5px;
+    padding-top: 9px;
+}
+
+.pagina-christofides .gl-ch-arista-chip {
+    padding: 5px 8px;
+    border: 1px solid #cde9e0;
+    border-radius: 7px;
+    background: #e8f6f2;
+    color: #226f64;
+    font-size: .77rem;
+    font-weight: 660;
+}
+
+.pagina-christofides .gl-ch-vertice-chip {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    min-width: 26px;
+    padding: 4px 7px;
+    background: #e8f5f2;
+    border: 1px solid #cee8df;
+    border-radius: 7px;
+    font-size: .78rem;
+    font-weight: 700;
+    color: #237467;
+}
+
+.pagina-christofides .gl-ch-vertice-chip.gl-ch-repetido {
+    background: #eff2f4;
+    border-color: #e0e7eb;
+    color: #9aa6b0;
+    text-decoration: line-through;
+    font-weight: 500;
+}
+
+.pagina-christofides .gl-ch-flecha {
+    color: #9eaebb;
+    font-size: .81rem;
+}
+
+.pagina-christofides .gl-ch-linea-actual {
+    margin-top: 9px;
+    background: #f0f5f7;
+    border: 1px solid #e0eaf0;
+    border-radius: 9px;
+    padding: 9px 11px;
+    display: flex;
+    justify-content: space-between;
+    gap: 9px;
+    align-items: center;
+    color: #2d5b73;
+    font-size: .81rem;
+}
+
+.pagina-christofides .gl-ch-linea-actual span {
+    color: #688196;
+    font-size: .75rem;
+}
+
+.pagina-christofides .gl-ch-explicacion {
+    margin-top: 14px;
+    background: #f3f7f9;
+    border: 1px solid #dfebf0;
+    border-radius: 10px;
+    padding: 13px;
+    color: #48687c;
+    font-size: .82rem;
+}
+
+.pagina-christofides .gl-ch-explicacion strong {
+    color: #2d556d;
+}
+
+.pagina-christofides .gl-ch-explicacion p {
+    margin: 5px 0 7px;
+    line-height: 1.48;
+}
+
+.pagina-christofides .gl-ch-formula-inline {
+    font-weight: 800;
+    font-size: 1.03rem;
+    color: #225d68;
+}
+
+.pagina-christofides .gl-ch-calculo {
+    margin-top: 13px;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 8px;
+}
+
+.pagina-christofides .gl-ch-calculo>div {
+    min-width: 0;
+    border-radius: 8px;
+    background: #f5f7fa;
+    border: 1px solid #e6edf2;
+    padding: 10px;
+}
+
+.pagina-christofides .gl-ch-calculo strong {
+    display: block;
+    color: #345c74;
+    font-size: .9rem;
+    margin-top: 4px;
+    overflow-wrap: anywhere;
+}
+
+.pagina-christofides .gl-ch-nota-estado {
+    margin: 10px 0 0;
+    color: #7a8d9b;
+    line-height: 1.5;
+    font-size: .79rem;
+}
+
+.pagina-christofides .gl-ch-conclusion {
+    margin-top: 17px;
+    padding: 13px;
+    border: 1px solid #cce7dc;
+    border-radius: 10px;
+    background: #edf7f3;
+    color: #346f61;
+}
+
+.pagina-christofides .gl-ch-conclusion strong {
+    display: block;
+    color: #176859;
+    font-size: .88rem;
+}
+
+.pagina-christofides .gl-ch-conclusion p {
+    margin: 7px 0 0;
+    font-size: .79rem;
+    line-height: 1.48;
+}
+
+.pagina-christofides .gl-ch-nota {
+    margin: 12px 2px 0;
+    color: #92a0ac;
+    font-size: .75rem;
+}
+
+/* Tarjeta de hover, identica en lenguaje a Kruskal, con distincion de copias. */
+.pagina-christofides .gl-ch-tooltip-arista {
+    position: absolute;
+    top: 14px;
+    left: 14px;
+    z-index: 5;
+    min-width: 152px;
+    max-width: calc(100% - 28px);
+    padding: 10px 13px 11px;
+    color: #f8fbfd;
+    background: rgba(31, 55, 74, .97);
+    border: 1px solid rgba(255, 255, 255, .17);
+    border-radius: 10px;
+    box-shadow: 0 8px 22px rgba(28, 51, 70, .17);
+    pointer-events: none;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(5px);
+    transition: opacity .14s ease, transform .14s ease, visibility .14s ease;
+}
+
+.pagina-christofides .gl-ch-tooltip-visible {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.pagina-christofides .gl-ch-tooltip-titulo {
+    display: block;
+    margin-bottom: 6px;
+    font-size: .63rem;
+    line-height: 1.1;
+    font-weight: 750;
+    letter-spacing: .1em;
+    color: #bbd1de;
+}
+
+.pagina-christofides .gl-ch-tooltip-fila {
+    display: flex;
+    gap: 19px;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.pagina-christofides .gl-ch-tooltip-extremos {
+    font-size: 1.18rem;
+    line-height: 1.2;
+    font-weight: 750;
+    white-space: nowrap;
+}
+
+.pagina-christofides .gl-ch-tooltip-peso {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 2px;
+}
+
+.pagina-christofides .gl-ch-tooltip-peso-label {
+    font-size: .65rem;
+    line-height: 1;
+    color: #bbd1de;
+}
+
+.pagina-christofides .gl-ch-tooltip-peso-valor {
+    font-size: 1.18rem;
+    line-height: 1.15;
+    color: #a5e1d4;
+    font-weight: 750;
+}
+
+@media (max-width: 1150px) {
+    .pagina-christofides .gl-ch-distribucion {
+        grid-template-columns: minmax(0, 1.35fr) minmax(310px, 1fr);
+    }
+
+    .pagina-christofides .gl-ch-etiquetas {
+        display: none;
+    }
+
+    .pagina-christofides .gl-ch-metricas {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 880px) {
+    .pagina-christofides .gl-ch-distribucion {
+        grid-template-columns: 1fr;
+    }
+
+    .pagina-christofides .gl-ch-panel-estado {
+        max-height: none;
+    }
+
+    .pagina-christofides .gl-ch-grafo {
+        height: clamp(290px, 52vw, 430px) !important;
+    }
+}
+
+@media (max-width: 540px) {
+
+    .pagina-christofides .gl-ch-panel-grafo,
+    .pagina-christofides .gl-ch-panel-estado {
+        padding: 12px;
+    }
+
+    .pagina-christofides .gl-ch-controles {
+        align-items: stretch;
+    }
+
+    .pagina-christofides .gl-ch-avance {
+        max-width: none;
+    }
+
+    .pagina-christofides .gl-ch-botones {
+        width: 100%;
+    }
+
+    .pagina-christofides .gl-ch-botones .btn {
+        flex: 1 1 auto;
+    }
+
+    .pagina-christofides .gl-ch-calculo {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .pagina-christofides .gl-ch-progreso-valor,
+    .pagina-christofides .gl-ch-tooltip-arista {
+        transition: none;
+    }
+}
+
+
+/* Christofides: nombres de panel y fichas propios, sin cambiar otros laboratorios. */
+.pagina-christofides .gl-ch-panel-titulo {
+    margin: 4px 0 9px;
+    color: #294b60;
+    font-weight: 770;
+    line-height: 1.22;
+    font-size: 1.18rem;
+}
+
+.pagina-christofides .gl-ch-seccion {
+    border-top: 1px solid #e8edf1;
+    margin: 13px 0 0;
+    padding-top: 12px;
+    color: #334f62;
+    font-size: .85rem;
+    font-weight: 730;
+}
+
+.pagina-christofides .gl-ch-chip {
+    display: inline-flex;
+    align-items: center;
+    padding: 5px 8px;
+    border: 1px solid #cde9e0;
+    border-radius: 7px;
+    background: #e8f6f2;
+    color: #226f64;
+    font-size: .76rem;
+    font-weight: 660;
+}
+
+.pagina-christofides .gl-ch-chip-impar {
+    border-color: #ded7ed;
+    background: #f1eff8;
+    color: #68558f;
+}
+
+.pagina-christofides .gl-ch-secuencia {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.pagina-christofides .gl-ch-vertice {
+    display: inline-flex;
+    justify-content: center;
+    min-width: 27px;
+    padding: 4px 7px;
+    border: 1px solid #cee8df;
+    border-radius: 7px;
+    background: #e8f5f2;
+    color: #237467;
+    font-size: .78rem;
+    font-weight: 700;
+}
+
+.pagina-christofides .gl-ch-repetido {
+    color: #9aa6b0;
+    background: #eff2f4;
+    border-color: #e0e7eb;
+    text-decoration: line-through;
+}
+
+.pagina-christofides .gl-ch-formula {
+    padding: 9px 12px;
+    margin: 11px 0;
+    border-radius: 9px;
+    background: #e9f3f0;
+    color: #1f7163;
+    font-size: 1.05rem;
+    font-weight: 800;
+    text-align: center;
+}
+
+.pagina-christofides .gl-ch-calculo {
+    margin-top: 12px;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+}
+
+.pagina-christofides .gl-ch-calculo>div {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 10px;
+    border: 1px solid #e2e9ef;
+    border-radius: 9px;
+    background: #f5f8fa;
+}
+
+.pagina-christofides .gl-ch-calculo span {
+    font-size: .71rem;
+    color: #75889a;
+}
+
+.pagina-christofides .gl-ch-calculo strong {
+    font-size: .84rem;
+    color: #365c72;
+}
+
+/* Tres alternativas de matching: una vista previa, no un cambio del modelo. */
+.pagina-christofides .gl-ch-explorador {
+    padding-top: 8px;
+    margin-top: 14px;
+    border-top: 1px solid #e8edf1;
+}
+
+.pagina-christofides .gl-ch-explorador.gl-ch-oculto {
+    display: none;
+}
+
+.pagina-christofides .gl-ch-explorador .gl-ch-seccion {
+    border-top: 0;
+    padding-top: 0;
+    margin: 4px 0 5px;
+}
+
+.pagina-christofides .gl-ch-explorador .gl-ch-nota {
+    margin: 0 0 9px;
+}
+
+.pagina-christofides .gl-ch-opcion {
+    display: grid;
+    grid-template-columns: 62px minmax(0, 1fr) auto;
+    grid-template-rows: auto auto;
+    align-items: center;
+    gap: 3px 8px;
+    width: 100%;
+    padding: 10px;
+    margin: 0 0 7px;
+    color: #375568;
+    border: 1px solid #dfe7ed;
+    border-radius: 10px;
+    background: #fafcfd;
+    text-align: left;
+    font: inherit;
+    cursor: pointer;
+    transition: border-color 160ms ease, background 160ms ease, box-shadow 160ms ease;
+}
+
+.pagina-christofides .gl-ch-opcion:hover {
+    background: #f0f6f9;
+    border-color: #adc9d5;
+}
+
+.pagina-christofides .gl-ch-opcion:focus-visible {
+    outline: 2px solid #658eaa;
+    outline-offset: 2px;
+}
+
+.pagina-christofides .gl-ch-opcion.gl-ch-opcion-activa {
+    border-color: #9281bb;
+    background: #f3f0fa;
+    box-shadow: inset 3px 0 #7760a2;
+}
+
+.pagina-christofides .gl-ch-opcion-indice {
+    font-size: .68rem;
+    color: #7e91a0;
+}
+
+.pagina-christofides .gl-ch-opcion-pares {
+    font-size: .81rem;
+    font-weight: 660;
+}
+
+.pagina-christofides .gl-ch-opcion-costo {
+    font-size: 1.07rem;
+    color: #425c70;
+}
+
+.pagina-christofides .gl-ch-opcion-badge {
+    grid-column: 2 / 4;
+    justify-self: start;
+    color: #267d70;
+    font-size: .65rem;
+    font-weight: 760;
+}
+
+.pagina-christofides .gl-ch-opcion-badge:empty {
+    display: none;
+}
+
+.pagina-christofides .gl-ch-nota-final {
+    margin: 12px 2px 0;
+    color: #92a0ac;
+    font-size: .75rem;
+}
+
+@media (max-width: 540px) {
+    .pagina-christofides .gl-ch-calculo {
+        grid-template-columns: 1fr;
+    }
+}

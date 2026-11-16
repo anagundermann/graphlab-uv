@@ -1,0 +1,547 @@
+/* GraphLab UV | Comparacion de soluciones TSP
+   Estilo exclusivo de la pagina de Comparacion.
+   Conserva el lenguaje visual de Kruskal, Doble arbol y Christofides. */
+
+/* La cabecera compacta libera espacio para los dos circuitos. */
+.graphlab-app:has(.pagina-comparacion) .graphlab-encabezado {
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.graphlab-app:has(.pagina-comparacion) .graphlab-sobretitulo,
+.graphlab-app:has(.pagina-comparacion) .graphlab-subtitulo {
+    display: none;
+}
+
+.graphlab-app:has(.pagina-comparacion) .graphlab-titulo {
+    margin: 0;
+    font-size: 1.55rem;
+    line-height: 1.2;
+}
+
+.graphlab-app:has(.pagina-comparacion) .graphlab-navegacion {
+    padding-top: 6px;
+    padding-bottom: 6px;
+}
+
+.graphlab-app:has(.pagina-comparacion) .graphlab-nav-boton {
+    padding-top: 8px;
+    padding-bottom: 8px;
+}
+
+.graphlab-app:has(.pagina-comparacion) .graphlab-contenido {
+    padding-top: 12px;
+    padding-bottom: 22px;
+}
+
+.pagina-comparacion {
+    --gl-cm-borde: #dce5ec;
+    --gl-cm-texto: #263445;
+    --gl-cm-azul: #267ca5;
+    --gl-cm-morado: #8062b1;
+}
+
+.pagina-comparacion .gl-cm-intro {
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+    gap: 15px 22px;
+    margin-bottom: 13px;
+}
+
+.pagina-comparacion .gl-cm-sobretitulo {
+    color: #47758c;
+    font-size: .68rem;
+    letter-spacing: .105em;
+    font-weight: 800;
+}
+
+.pagina-comparacion .gl-cm-intro h2 {
+    color: #253a4b;
+    margin: 3px 0 3px;
+    font-size: clamp(1.3rem, 1.7vw, 1.65rem);
+    line-height: 1.2;
+    font-weight: 760;
+}
+
+.pagina-comparacion .gl-cm-intro p {
+    margin: 0;
+    color: #617386;
+    font-size: .88rem;
+}
+
+.pagina-comparacion .gl-cm-filtros {
+    display: flex;
+    align-items: end;
+    gap: 14px;
+    flex-wrap: wrap;
+}
+
+.pagina-comparacion .gl-cm-origen {
+    width: 142px;
+    flex: 0 0 142px;
+}
+
+.pagina-comparacion .gl-cm-origen label {
+    display: block;
+    font-size: .74rem;
+    font-weight: 660;
+    margin-bottom: 4px;
+    color: #526d82;
+}
+
+.pagina-comparacion .gl-cm-origen .Select-control {
+    border-color: #cbd9e3;
+    border-radius: 9px;
+}
+
+.pagina-comparacion .gl-cm-filtro {
+    padding: 0 0 6px;
+    white-space: nowrap;
+}
+
+.pagina-comparacion .gl-cm-switch {
+    margin: 0;
+    color: #526d82;
+    font-size: .81rem;
+}
+
+.pagina-comparacion .gl-cm-switch .form-check-input:checked {
+    background-color: #416b86;
+    border-color: #416b86;
+}
+
+/* Tres KPI breves sobre los grafos. */
+.pagina-comparacion .gl-cm-kpis {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+    margin-bottom: 13px;
+}
+
+.pagina-comparacion .gl-cm-kpi {
+    background: #fff;
+    border: 1px solid var(--gl-cm-borde);
+    border-radius: 12px;
+    padding: 10px 15px;
+    min-width: 0;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    align-items: baseline;
+    column-gap: 8px;
+    box-shadow: 0 4px 14px rgba(35, 55, 76, .04);
+}
+
+.pagina-comparacion .gl-cm-kpi-etiqueta {
+    grid-column: 1/-1;
+    color: #667a8b;
+    font-size: .76rem;
+    font-weight: 620;
+}
+
+.pagina-comparacion .gl-cm-kpi-valor {
+    font-size: clamp(1.5rem, 2.05vw, 2rem);
+    font-weight: 790;
+    line-height: 1.25;
+    font-variant-numeric: tabular-nums;
+}
+
+.pagina-comparacion .gl-cm-kpi-detalle {
+    font-size: .74rem;
+    color: #6e8090;
+}
+
+.pagina-comparacion .gl-cm-kpi-doble .gl-cm-kpi-valor {
+    color: var(--gl-cm-azul);
+}
+
+.pagina-comparacion .gl-cm-kpi-christofides .gl-cm-kpi-valor {
+    color: var(--gl-cm-morado);
+}
+
+.pagina-comparacion .gl-cm-kpi-diferencia .gl-cm-kpi-valor {
+    color: #294b63;
+}
+
+/* Dos grafos de identicas dimensiones y posiciones. */
+.pagina-comparacion .gl-cm-grafos {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: stretch;
+    gap: 14px;
+}
+
+.pagina-comparacion .gl-cm-tarjeta {
+    min-width: 0;
+    background: #fff;
+    border: 1px solid var(--gl-cm-borde);
+    border-radius: 15px;
+    box-shadow: 0 5px 18px rgba(35, 55, 76, .05);
+}
+
+.pagina-comparacion .gl-cm-tarjeta-grafo {
+    padding: 13px 15px 14px;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.pagina-comparacion .gl-cm-grafo-titulo {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 7px;
+    margin-bottom: 9px;
+}
+
+.pagina-comparacion .gl-cm-grafo-titulo h3 {
+    margin: 1px 0 0;
+    font-size: 1.04rem;
+    font-weight: 740;
+}
+
+.pagina-comparacion .gl-cm-instruccion {
+    font-size: .72rem;
+    color: #8a98a4;
+}
+
+.pagina-comparacion .gl-cm-grafo-contenedor {
+    position: relative;
+    overflow: hidden;
+    border: 1px solid #edf2f6;
+    background: #fbfcfe;
+    border-radius: 11px;
+    min-width: 0;
+}
+
+.pagina-comparacion .gl-cm-grafo {
+    width: 100%;
+    height: clamp(275px, 39dvh, 410px) !important;
+    min-height: 0;
+}
+
+.pagina-comparacion .gl-cm-recorrido {
+    min-height: 2em;
+    padding: 11px 7px 0;
+    text-align: center;
+    font-weight: 680;
+    font-size: .84rem;
+    line-height: 1.55;
+    color: #466074;
+    overflow-wrap: anywhere;
+}
+
+.pagina-comparacion .gl-cm-leyenda,
+.pagina-comparacion .gl-cm-leyenda-oculta {
+    gap: 9px 17px;
+    color: #647688;
+    font-size: .76rem;
+    margin: 10px 2px 0;
+}
+
+.pagina-comparacion .gl-cm-leyenda-item {
+    white-space: nowrap;
+}
+
+.pagina-comparacion .gl-cm-leyenda {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.pagina-comparacion .gl-cm-leyenda-oculta {
+    display: none;
+}
+
+.pagina-comparacion .gl-cm-leyenda-compartida {
+    color: #a8b8c5;
+    margin-right: 5px;
+}
+
+.pagina-comparacion .gl-cm-leyenda-doble {
+    color: #267ca5;
+    margin: 0 5px 0 9px;
+}
+
+.pagina-comparacion .gl-cm-leyenda-christofides {
+    color: #8062b1;
+    margin: 0 5px 0 9px;
+}
+
+/* Tooltip discreto para aristas, coherente con Kruskal. */
+.pagina-comparacion .gl-cm-tooltip {
+    display: none;
+    position: absolute;
+    top: 13px;
+    left: 13px;
+    z-index: 4;
+    pointer-events: none;
+    width: max-content;
+    min-width: 155px;
+    max-width: min(80%, 260px);
+    color: #f9fcfe;
+    background: rgba(31, 55, 74, .96);
+    border: 1px solid rgba(180, 211, 224, .26);
+    box-shadow: 0 9px 25px rgba(23, 45, 65, .20);
+    padding: 10px 12px;
+    border-radius: 10px;
+}
+
+.pagina-comparacion .gl-cm-tooltip-visible {
+    display: block;
+    animation: gl-cm-aparecer 130ms ease-out;
+}
+
+@keyframes gl-cm-aparecer {
+    from {
+        opacity: 0;
+        transform: translateY(4px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.pagina-comparacion .gl-cm-tooltip-sobretitulo {
+    color: #b8d0dc;
+    letter-spacing: .08em;
+    font-weight: 750;
+    font-size: .61rem;
+}
+
+.pagina-comparacion .gl-cm-tooltip-fila {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 26px;
+    margin-top: 4px;
+}
+
+.pagina-comparacion .gl-cm-tooltip-arista {
+    font-size: 1.12rem;
+    font-weight: 760;
+}
+
+.pagina-comparacion .gl-cm-tooltip-peso {
+    display: flex;
+    flex-direction: column;
+    align-items: end;
+}
+
+.pagina-comparacion .gl-cm-tooltip-etiqueta {
+    color: #b8d0dc;
+    font-size: .66rem;
+}
+
+.pagina-comparacion .gl-cm-tooltip-valor {
+    color: #a5e1d4;
+    font-size: 1.16rem;
+}
+
+/* Resultado interpretado sin una seccion larga de texto. */
+.pagina-comparacion .gl-cm-conclusion {
+    margin: 12px 0 13px;
+    padding: 13px 17px;
+    border-left: 3px solid #7491a4;
+}
+
+.pagina-comparacion .gl-cm-conclusion h3 {
+    font-size: .96rem;
+    font-weight: 750;
+    margin: 0 0 7px;
+}
+
+.pagina-comparacion .gl-cm-conclusion p {
+    font-size: .85rem;
+    line-height: 1.5;
+    color: #526a7c;
+    margin: 0 0 5px;
+}
+
+.pagina-comparacion .gl-cm-conclusion .gl-cm-observacion-fuerte {
+    font-weight: 700;
+    color: #294a61;
+}
+
+.pagina-comparacion .gl-cm-conclusion .gl-cm-aclaracion {
+    font-size: .78rem;
+    color: #7a8c99;
+    margin-top: 7px;
+}
+
+/* Detalles nativos: sin callbacks ni componentes adicionales. */
+.pagina-comparacion .gl-cm-detalles {
+    background: #fff;
+    border: 1px solid var(--gl-cm-borde);
+    border-radius: 12px;
+    margin: 12px 0 16px;
+    overflow: hidden;
+}
+
+.pagina-comparacion .gl-cm-detalles summary {
+    padding: 13px 17px;
+    color: #385b73;
+    font-weight: 730;
+    font-size: .88rem;
+    cursor: pointer;
+    user-select: none;
+}
+
+.pagina-comparacion .gl-cm-detalles summary:hover {
+    background: #f5f8fb;
+}
+
+.pagina-comparacion .gl-cm-detalles[open] summary {
+    border-bottom: 1px solid #e2e9ef;
+}
+
+.pagina-comparacion .gl-cm-detalles summary:focus-visible {
+    outline: 3px solid #92b6cc;
+    outline-offset: -3px;
+}
+
+.pagina-comparacion .gl-cm-tabla-contenedor {
+    padding: 10px 14px 5px;
+}
+
+.pagina-comparacion .gl-cm-tabla {
+    margin: 0;
+    font-size: .83rem;
+    color: #3e5366;
+}
+
+.pagina-comparacion .gl-cm-tabla td,
+.pagina-comparacion .gl-cm-tabla th {
+    padding: 8px 10px;
+    border-color: #e5edf2;
+}
+
+.pagina-comparacion .gl-cm-tabla .gl-cm-fila-final {
+    font-weight: 750;
+}
+
+.pagina-comparacion .gl-cm-tabla .gl-cm-fila-final>* {
+    --bs-table-bg: #eaf3f6;
+}
+
+.pagina-comparacion .gl-cm-tabla .gl-cm-fila-activa {
+    font-weight: 750;
+}
+
+.pagina-comparacion .gl-cm-tabla .gl-cm-fila-activa>* {
+    --bs-table-bg: #e4f2f9;
+}
+
+/* Comparacion de los siete origenes. */
+.pagina-comparacion .gl-cm-analisis {
+    padding: 16px 18px 13px;
+}
+
+.pagina-comparacion .gl-cm-seccion-cabecera {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.pagina-comparacion .gl-cm-analisis h3 {
+    margin: 3px 0 0;
+    font-size: 1.12rem;
+    font-weight: 740;
+}
+
+.pagina-comparacion .gl-cm-optimo {
+    border-radius: 999px;
+    padding: 6px 11px;
+    font-weight: 690;
+    font-size: .77rem;
+    color: #456276;
+    border: 1px solid #d6e1e8;
+    background: #edf3f7;
+}
+
+.pagina-comparacion .gl-cm-texto-secundario {
+    font-size: .83rem;
+    color: #667a8b;
+    margin: 7px 0;
+}
+
+.pagina-comparacion .gl-cm-grafico-barras {
+    width: 100%;
+    min-width: 0;
+    min-width: 0;
+    position: relative;
+}
+
+.pagina-comparacion .gl-cm-nota-grafico {
+    margin-top: 0;
+}
+
+.pagina-comparacion .gl-cm-detalles-interno {
+    margin-bottom: 0;
+    background: #fdfefe;
+}
+
+@media (max-width: 1100px) {
+    .pagina-comparacion .gl-cm-intro {
+        align-items: start;
+        flex-wrap: wrap;
+    }
+
+    .pagina-comparacion .gl-cm-grafo {
+        height: 310px !important;
+    }
+}
+
+@media (max-width: 870px) {
+    .pagina-comparacion .gl-cm-grafos {
+        grid-template-columns: 1fr;
+    }
+
+    .pagina-comparacion .gl-cm-grafo {
+        height: 340px !important;
+    }
+}
+
+@media (max-width: 650px) {
+    .pagina-comparacion .gl-cm-kpis {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .pagina-comparacion .gl-cm-kpi-diferencia {
+        grid-column: 1/-1;
+    }
+
+    .pagina-comparacion .gl-cm-intro h2 {
+        font-size: 1.35rem;
+    }
+
+    .pagina-comparacion .gl-cm-filtros {
+        width: 100%;
+    }
+
+    .pagina-comparacion .gl-cm-grafo {
+        height: 285px !important;
+    }
+
+    .pagina-comparacion .gl-cm-tarjeta-grafo {
+        padding: 11px;
+    }
+
+    .pagina-comparacion .gl-cm-grafo-titulo h3 {
+        font-size: .97rem;
+    }
+
+    .pagina-comparacion .gl-cm-analisis {
+        padding: 13px 11px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .pagina-comparacion .gl-cm-tooltip-visible {
+        animation: none;
+    }
+}

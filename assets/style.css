@@ -1,0 +1,217 @@
+/* GraphLab UV · Sistema visual educativo y académico */
+:root {
+    --gl-ink: #263445;
+    --gl-muted: #657589;
+    --gl-primary: #416B86;
+    --gl-primary-dark: #294d67;
+    --gl-teal: #238A80;
+    --gl-amber: #C58A35;
+    --gl-line: #dce5ec;
+    --gl-surface: #ffffff;
+    --gl-background: #f3f6f9;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    color: var(--gl-ink);
+    background: var(--gl-background);
+    font-family: "Segoe UI", system-ui, Arial, sans-serif;
+}
+
+.graphlab-app {
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+}
+
+.graphlab-encabezado {
+    background: #fff;
+    border-bottom: 1px solid var(--gl-line);
+    padding: 25px clamp(20px, 3vw, 54px) 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.graphlab-sobretitulo {
+    color: var(--gl-primary);
+    letter-spacing: .12em;
+    font-size: .69rem;
+    font-weight: 800;
+}
+
+.graphlab-titulo {
+    margin: 5px 0 0;
+    font-size: clamp(1.9rem, 2.4vw, 2.7rem);
+    line-height: 1.1;
+    font-weight: 800;
+    letter-spacing: -.035em;
+    color: #24374a;
+}
+
+.graphlab-subtitulo {
+    margin: 8px 0 0;
+    color: var(--gl-muted);
+    font-size: .98rem;
+}
+
+.graphlab-conceptos .btn {
+    background: #fff;
+    border: 1px solid #bacbd8;
+    color: var(--gl-primary-dark);
+    border-radius: 9px;
+    font-weight: 650;
+}
+
+.graphlab-conceptos .btn:hover {
+    background: #eaf1f6;
+    border-color: #9eb8c9;
+    color: var(--gl-primary-dark);
+}
+
+.graphlab-navegacion {
+    padding: 10px clamp(20px, 3vw, 54px);
+    background: #fff;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    border-bottom: 1px solid var(--gl-line);
+    position: sticky;
+    top: 0;
+    z-index: 15;
+}
+
+.graphlab-nav-boton {
+    appearance: none;
+    border: 1px solid transparent;
+    background: transparent;
+    border-radius: 9px;
+    color: #546b7d;
+    padding: 10px 15px;
+    font-size: .91rem;
+    font-weight: 650;
+    cursor: pointer;
+    transition: background 150ms ease, border-color 150ms ease, color 150ms ease;
+}
+
+.graphlab-nav-boton:hover {
+    background: #eef4f7;
+    color: #244c68;
+}
+
+.graphlab-nav-boton.activo {
+    background: #e6eef4;
+    color: #244f69;
+    border-color: #b0c8d6;
+    box-shadow: inset 0 -2px 0 #416b86;
+}
+
+.graphlab-nav-boton:focus-visible {
+    outline: 3px solid #9ab8d0;
+    outline-offset: 2px;
+}
+
+.graphlab-contenido {
+    width: 100%;
+    max-width: 1600px;
+    margin: 0 auto;
+    flex: 1;
+    padding: 20px clamp(20px, 3vw, 54px) 36px;
+    min-width: 0;
+}
+
+.graphlab-contenido h2,
+.graphlab-contenido h3,
+.graphlab-contenido h4 {
+    color: var(--gl-ink);
+}
+
+.graphlab-contenido .card {
+    border-color: var(--gl-line) !important;
+    border-radius: 14px !important;
+    box-shadow: 0 4px 15px rgba(35, 55, 76, .045) !important;
+}
+
+.graphlab-contenido .btn-primary {
+    background: #416b86;
+    border-color: #416b86;
+}
+
+.graphlab-contenido .btn-primary:hover {
+    background: #2f5670;
+    border-color: #2f5670;
+}
+
+.graphlab-contenido .btn-outline-primary {
+    color: #416b86;
+    border-color: #7fa1b8;
+}
+
+.graphlab-contenido .btn-outline-primary:hover {
+    background: #416b86;
+    color: #fff;
+}
+
+.graphlab-contenido .table {
+    --bs-table-bg: transparent;
+}
+
+.graphlab-contenido .table thead th {
+    background: #eaf0f4;
+    color: #334e62;
+}
+
+.graphlab-contenido .accordion-button:not(.collapsed) {
+    background: #eaf1f5;
+    color: #284f68;
+}
+
+.graphlab-pie {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+    color: #7a8894;
+    background: #fff;
+    padding: 16px clamp(20px, 3vw, 54px);
+    border-top: 1px solid var(--gl-line);
+    font-size: .78rem;
+}
+
+@media (max-width: 780px) {
+    .graphlab-encabezado {
+        padding-top: 19px;
+    }
+
+    .graphlab-navegacion {
+        position: static;
+    }
+
+    .graphlab-nav-boton {
+        flex: 1 1 auto;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .graphlab-nav-boton {
+        transition: none;
+    }
+}
+
+
+
+/* Efecto de presion solo en botones de control */
+
+.graphlab-app button:not(:disabled):is([id$="-anterior"],
+    [id$="-siguiente"],
+    [id$="-reiniciar"],
+    [id$="-reproducir"]):active {
+    transform: translateY(2px) scale(0.985);
+}

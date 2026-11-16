@@ -1,0 +1,473 @@
+/* ===========================================================
+   GRAPHLAB UV - INTRODUCCION Y BIBLIOTECA MATEMATICA
+   No modifica los graficos ni controles de los laboratorios.
+   =========================================================== */
+
+/* Acceso discreto en el encabezado compartido */
+.graphlab-encabezado .gl-bib-boton-encabezado {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: #fff;
+    border: 1px solid #b9cad6;
+    color: #315870;
+    border-radius: 9px;
+    font-weight: 650;
+    font-size: .89rem;
+    padding: 9px 13px;
+    cursor: pointer;
+    transition: background-color 140ms ease, border-color 140ms ease;
+}
+
+.graphlab-encabezado .gl-bib-boton-encabezado:hover {
+    background: #eef4f8;
+    border-color: #8cabbc;
+    color: #24485f;
+}
+
+.graphlab-encabezado .gl-bib-boton-encabezado:focus-visible,
+.gl-bib-pagina button:focus-visible,
+.gl-intro-pagina button:focus-visible {
+    outline: 3px solid #92b9ce;
+    outline-offset: 3px;
+}
+
+/* La biblioteca es navegación, no un botón físico de los simuladores. */
+.graphlab-app button.gl-bib-boton-encabezado:active,
+.graphlab-app button.gl-intro-biblioteca:active,
+.graphlab-app button.gl-bib-volver:active,
+.graphlab-app button.gl-bib-item:active,
+.graphlab-app button.gl-bib-relacionado:active {
+    transform: none;
+}
+
+/* Introducción compacta */
+.gl-intro-pagina {
+    color: #263445;
+}
+
+.gl-intro-dos-columnas {
+    display: grid;
+    grid-template-columns: minmax(0, 1.04fr) minmax(0, .96fr);
+    gap: 18px;
+    align-items: stretch;
+}
+
+.gl-intro-presentacion,
+.gl-intro-grafo,
+.gl-intro-algoritmo {
+    background: #fff;
+    border: 1px solid #dce5ec;
+    border-radius: 15px;
+    box-shadow: 0 5px 17px rgba(30, 55, 76, .04);
+}
+
+.gl-intro-presentacion {
+    padding: clamp(20px, 2.5vw, 34px);
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.gl-intro-kicker,
+.gl-bib-kicker {
+    font-size: .69rem;
+    letter-spacing: .075em;
+    font-weight: 800;
+    color: #54778c;
+}
+
+.gl-intro-titulo {
+    margin: 0;
+    font-size: clamp(1.55rem, 2.15vw, 2.2rem);
+    font-weight: 800;
+    color: #21394d;
+    letter-spacing: -.025em;
+}
+
+.gl-intro-descripcion {
+    margin: 0;
+    color: #4e6273;
+    font-size: .98rem;
+    line-height: 1.62;
+}
+
+.gl-intro-matematica {
+    background: #f3f7fa;
+    border: 1px solid #e0eaf0;
+    border-radius: 12px;
+    padding: 15px 18px;
+}
+
+.gl-intro-formula {
+    text-align: center;
+    margin: 3px 0;
+    color: #244a63;
+    overflow-x: auto;
+}
+
+.gl-intro-formula-nota,
+.gl-intro-biblioteca-nota {
+    margin: 0;
+    font-size: .8rem;
+    color: #65798a;
+}
+
+.gl-intro-acciones {
+    margin-top: auto;
+    display: flex;
+    gap: 9px;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.gl-intro-biblioteca {
+    color: #fff;
+    background: #416b86;
+    border: 1px solid #416b86;
+    border-radius: 9px;
+    padding: 10px 15px;
+    font-weight: 650;
+    cursor: pointer;
+}
+
+.gl-intro-biblioteca:hover {
+    background: #325873;
+    border-color: #325873;
+}
+
+.gl-intro-grafo {
+    padding: 17px 19px 14px;
+}
+
+.gl-intro-grafo-cabecera {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.gl-intro-costo {
+    color: #18766d;
+    font-size: .82rem;
+    font-weight: 750;
+    background: #e5f5f0;
+    border-radius: 7px;
+    padding: 5px 9px;
+}
+
+.gl-intro-grafo-pie {
+    margin: 0;
+    font-size: .83rem;
+    text-align: center;
+    color: #697b87;
+}
+
+.gl-intro-algoritmos {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 13px;
+    margin-top: 16px;
+}
+
+.gl-intro-algoritmo {
+    padding: 17px 19px;
+}
+
+.gl-intro-algoritmo h3 {
+    font-size: 1rem;
+    margin: 4px 0 7px;
+    font-weight: 750;
+}
+
+.gl-intro-algoritmo p {
+    font-size: .87rem;
+    color: #5a7082;
+    line-height: 1.5;
+    margin: 0;
+}
+
+.gl-intro-numero {
+    color: #6b91a7;
+    font-weight: 800;
+    font-size: .73rem;
+}
+
+/* Biblioteca: índice y lectura sin aperturas de modal */
+.gl-bib-pagina {
+    min-width: 0;
+}
+
+.gl-bib-cabecera {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 17px;
+}
+
+.gl-bib-encabezado-titulo {
+    margin: 3px 0 4px;
+    font-size: clamp(1.5rem, 2.1vw, 2rem);
+    font-weight: 800;
+}
+
+.gl-bib-encabezado-texto {
+    margin: 0;
+    font-size: .9rem;
+    color: #66798a;
+}
+
+.gl-bib-volver {
+    background: #fff;
+    color: #446880;
+    font-weight: 650;
+    border: 1px solid #cbd9e3;
+    border-radius: 9px;
+    padding: 9px 13px;
+    white-space: nowrap;
+    cursor: pointer;
+}
+
+.gl-bib-volver:hover {
+    background: #f0f5f8;
+}
+
+.gl-bib-columnas {
+    display: grid;
+    grid-template-columns: minmax(230px, 300px) minmax(0, 1fr);
+    gap: 18px;
+    align-items: start;
+}
+
+.gl-bib-lateral,
+.gl-bib-articulo {
+    background: #fff;
+    border: 1px solid #dce5ec;
+    border-radius: 15px;
+    box-shadow: 0 4px 17px rgba(30, 55, 76, .04);
+}
+
+.gl-bib-lateral {
+    padding: 17px 13px;
+    position: sticky;
+    top: 78px;
+    max-height: calc(100dvh - 104px);
+    overflow-y: auto;
+    scrollbar-width: thin;
+}
+
+.gl-bib-buscador-label {
+    display: block;
+    color: #43637b;
+    font-size: .78rem;
+    font-weight: 750;
+    margin: 0 3px 8px;
+}
+
+.gl-bib-selector {
+    margin-bottom: 18px;
+    font-size: .88rem;
+}
+
+.gl-bib-indice-titulo {
+    margin: 0 3px 9px;
+    font-size: .79rem;
+    letter-spacing: .025em;
+    color: #5c7182;
+    font-weight: 750;
+}
+
+.gl-bib-indice.accordion {
+    --bs-accordion-border-color: #e0e8ed;
+}
+
+.gl-bib-indice .accordion-button {
+    padding: 12px 11px;
+    font-size: .86rem;
+    font-weight: 750;
+    color: #3b5d75;
+}
+
+.gl-bib-indice .accordion-button:not(.collapsed) {
+    background: #eef4f7;
+    color: #315b74;
+}
+
+.gl-bib-indice .accordion-body {
+    padding: 7px 6px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.gl-bib-item {
+    display: block;
+    width: 100%;
+    background: transparent;
+    border: 0;
+    padding: 8px 10px;
+    text-align: left;
+    font-size: .83rem;
+    color: #526b7b;
+    border-radius: 7px;
+    cursor: pointer;
+}
+
+.gl-bib-item:hover {
+    background: #edf4f7;
+    color: #285b75;
+}
+
+.gl-bib-contador {
+    color: #81919e;
+    font-size: .75rem;
+    margin: 14px 3px 0;
+}
+
+.gl-bib-articulo {
+    padding: clamp(18px, 2.3vw, 34px);
+    min-height: 430px;
+    display: flex;
+    flex-direction: column;
+    gap: 19px;
+}
+
+.gl-bib-titulo-fila {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.gl-bib-titulo-concepto {
+    font-size: clamp(1.3rem, 1.8vw, 1.8rem);
+    margin: 0;
+    letter-spacing: -.01em;
+    font-weight: 800;
+}
+
+.gl-bib-subtitulo {
+    font-size: .85rem;
+    color: #2f576f;
+    font-weight: 750;
+    margin: 0 0 8px;
+}
+
+.gl-bib-formal {
+    padding: 17px 20px;
+    border-radius: 11px;
+    background: #f4f7fa;
+    border: 1px solid #e3ebf0;
+}
+
+.gl-bib-formula {
+    font-size: .95rem;
+    color: #243c51;
+    overflow-x: auto;
+    line-height: 1.65;
+}
+
+.gl-bib-formula> :last-child {
+    margin-bottom: 0;
+}
+
+.gl-bib-sencillo {
+    padding: 0 2px;
+}
+
+.gl-bib-explicacion {
+    font-size: .98rem;
+    color: #4a6072;
+    line-height: 1.65;
+    margin: 0;
+}
+
+.gl-bib-figura {
+    border: 1px solid #e8eef2;
+    background: #fafcfd;
+    border-radius: 11px;
+    overflow: hidden;
+}
+
+.gl-bib-propiedad {
+    background: #eef7f3;
+    border-left: 3px solid #238a80;
+    padding: 15px 18px;
+    border-radius: 0 9px 9px 0;
+    font-size: .95rem;
+}
+
+.gl-bib-propiedad> :last-child {
+    margin-bottom: 0;
+}
+
+.gl-bib-prueba .accordion-button {
+    color: #355e74;
+    font-size: .9rem;
+    font-weight: 700;
+}
+
+.gl-bib-demostracion {
+    font-size: .92rem;
+    line-height: 1.7;
+}
+
+.gl-bib-relacionados {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+}
+
+.gl-bib-relacionado {
+    border: 1px solid #cbdde6;
+    border-radius: 8px;
+    padding: 6px 10px;
+    font-size: .79rem;
+    background: #f6fafc;
+    color: #335d78;
+    cursor: pointer;
+}
+
+.gl-bib-relacionado:hover {
+    background: #e9f2f6;
+    border-color: #8aafc2;
+}
+
+.gl-bib-nota-fuente {
+    font-size: .77rem;
+    color: #7b8996;
+    margin: 12px 4px 0;
+}
+
+@media (max-width: 1050px) {
+    .gl-intro-dos-columnas {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 820px) {
+    .gl-bib-columnas {
+        grid-template-columns: 1fr;
+    }
+
+    .gl-bib-lateral {
+        position: static;
+        max-height: 290px;
+    }
+
+    .gl-intro-algoritmos {
+        grid-template-columns: 1fr;
+    }
+
+    .gl-bib-cabecera {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .gl-bib-boton-encabezado {
+        transition: none;
+    }
+}
