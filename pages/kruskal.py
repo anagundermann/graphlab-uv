@@ -83,17 +83,28 @@ ESTILO_GRAFO = [
         "selector": "edge",
         "style": {
             "line-color": "#aebdcc",
-            "opacity": 0.16,
+            "line-style": "dotted",
+            "opacity": 0.38,
             "width": 2,
         },
     },
     {
         "selector": 'edge[estado = "aceptada"]',
-        "style": {"line-color": "#238a80", "width": 5, "opacity": 1},
+        "style": {
+            "line-color": "#238a80",
+            "line-style": "solid",
+            "width": 5,
+            "opacity": 1,
+        },
     },
     {
         "selector": 'edge[estado = "aceptada_actual"]',
-        "style": {"line-color": "#127568", "width": 7, "opacity": 1},
+        "style": {
+            "line-color": "#127568",
+            "line-style": "solid",
+            "width": 7,
+            "opacity": 1,
+        },
     },
     {
         "selector": 'edge[estado = "rechazada_actual"]',
@@ -106,6 +117,42 @@ ESTILO_GRAFO = [
     },
     {"selector": 'edge[estado = "oculta"]', "style": {"display": "none"}},
 ]
+
+
+def estilo_grafo_con_pesos(mostrar_pesos=False):
+    """Activar etiquetas sin reconstruir elementos ni modificar el paso."""
+    if not mostrar_pesos:
+        return ESTILO_GRAFO
+
+    return ESTILO_GRAFO + [
+        {
+            "selector": "edge",
+            "style": {
+                "label": "data(peso)",
+                "font-size": 11,
+                "font-weight": "bold",
+                "color": "#2d4a5e",
+                "text-background-color": "#ffffff",
+                "text-background-opacity": 0.95,
+                "text-background-padding": "2px",
+                "text-border-width": 1,
+                "text-border-color": "#d3dfe8",
+                "text-border-opacity": 0.85,
+                "text-rotation": "none",
+            },
+        },
+        {
+            # Sin aumentar la intensidad de la linea, las etiquetas pendientes
+            # heredan la opacidad original y quedan practicamente ilegibles.
+            "selector": 'edge[estado = "pendiente"]',
+            "style": {
+                "opacity": 1,
+                "line-color": "#dae3eb",
+                "line-style": "dotted",
+                "width": 1.5,
+            },
+        },
+    ]
 
 
 def construir_tabla(paso):
@@ -272,17 +319,34 @@ def crear_pagina(paso_inicial=0, inicio_inicial="a"):
                                             ),
                                         ]
                                     ),
-                                    dbc.Checklist(
-                                        id="kruskal-mostrar-pendientes",
-                                        options=[
-                                            {
-                                                "label": "Mostrar aristas pendientes",
-                                                "value": "mostrar",
-                                            }
+                                    html.Div(
+                                        [
+                                            dbc.Checklist(
+                                                id="kruskal-mostrar-pendientes",
+                                                options=[
+                                                    {
+                                                        "label": "Mostrar aristas pendientes",
+                                                        "value": "mostrar",
+                                                    }
+                                                ],
+                                                value=["mostrar"],
+                                                switch=True,
+                                                className="gl-kr-switch",
+                                            ),
+                                            dbc.Checklist(
+                                                id="kruskal-mostrar-pesos",
+                                                options=[
+                                                    {
+                                                        "label": "Mostrar pesos",
+                                                        "value": "mostrar",
+                                                    }
+                                                ],
+                                                value=[],
+                                                switch=True,
+                                                className="gl-kr-switch",
+                                            ),
                                         ],
-                                        value=["mostrar"],
-                                        switch=True,
-                                        className="gl-kr-switch",
+                                        className="gl-kr-grafo-opciones",
                                     ),
                                 ],
                                 className="gl-kr-grafo-cabecera",
@@ -297,7 +361,7 @@ def crear_pagina(paso_inicial=0, inicio_inicial="a"):
                                             "padding": 35,
                                         },
                                         elements=construir_elementos(paso_inicial),
-                                        stylesheet=ESTILO_GRAFO,
+                                        stylesheet=estilo_grafo_con_pesos(False),
                                         style={"width": "100%", "height": "100%"},
                                         className="gl-kr-grafo",
                                         autoungrabify=True,
@@ -367,21 +431,21 @@ def crear_pagina(paso_inicial=0, inicio_inicial="a"):
                                     html.Div(
                                         [
                                             dbc.Button(
-                                                "Anterior",
+                                                "← Anterior",
                                                 id="kruskal-anterior",
                                                 n_clicks=0,
                                                 color="outline-secondary",
                                                 disabled=(paso_inicial == 0),
                                             ),
                                             dbc.Button(
-                                                "Siguiente",
+                                                "→ Siguiente",
                                                 id="kruskal-siguiente",
                                                 n_clicks=0,
                                                 color="primary",
                                                 disabled=(paso_inicial == ULTIMO_PASO),
                                             ),
                                             dbc.Button(
-                                                "Reiniciar",
+                                                "↻ Reiniciar",
                                                 id="kruskal-reiniciar",
                                                 n_clicks=0,
                                                 color="outline-secondary",
@@ -523,8 +587,7 @@ def crear_pagina(paso_inicial=0, inicio_inicial="a"):
                 className="gl-kr-distribucion",
             ),
             html.P(
-                "Datos del ejemplo: grafo completo ponderado con distancias métricas, "
-                "adaptado para GraphLab UV. Sus pesos no son los del taller original.",
+                "Datos del ejemplo: grafo completo ponderado con distancias métricas",
                 className="gl-kr-nota",
             ),
         ],
@@ -595,6 +658,14 @@ def registrar_callbacks(app):
             paso == 0,
             paso == ULTIMO_PASO,
         )
+
+    @app.callback(
+        Output("kruskal-grafo", "stylesheet"),
+        Input("kruskal-mostrar-pesos", "value"),
+    )
+    def alternar_pesos(mostrar):
+        """Modificar solo las etiquetas; conservar paso, nodos y aristas."""
+        return estilo_grafo_con_pesos("mostrar" in (mostrar or []))
 
     @app.callback(
         Output("kruskal-tooltip-arista", "children"),

@@ -215,3 +215,79 @@ body {
     [id$="-reproducir"]):active {
     transform: translateY(2px) scale(0.985);
 }
+
+/* ==========================================
+   GRAPHLAB UV · PRUEBA DE PALETA HIBRIDA
+   ========================================== */
+
+:root {
+    --gl-ink: #263445;
+    --gl-muted: #657589;
+    --gl-primary: #416b86;
+    --gl-primary-dark: #294d67;
+    --gl-teal: #238a80;
+    --gl-line: #dce5ec;
+    --gl-surface: #ffffff;
+    --gl-background: #eaf0f6;
+}
+
+/* Fondo general gris azulado */
+body,
+.graphlab-app {
+    background: #eaf0f6;
+    color: #263445;
+}
+
+/* Encabezado azul noche */
+.graphlab-encabezado {
+    background: #10263e;
+    border-bottom: 1px solid #2d4b64;
+}
+
+.graphlab-titulo {
+    color: #ffffff;
+}
+
+.graphlab-sobretitulo {
+    color: #a9cbdf;
+}
+
+/* Navegacion oscura */
+.graphlab-navegacion {
+    background: #10263e;
+    border-bottom: 1px solid #2d4b64;
+}
+
+.graphlab-nav-boton {
+    color: #d2e0ec;
+}
+
+.graphlab-nav-boton:hover {
+    background: #1c3a55;
+    color: #ffffff;
+}
+
+.graphlab-nav-boton.activo {
+    background: #295576;
+    color: #ffffff;
+    border-color: #71aaca;
+    box-shadow: inset 0 -2px 0 #8dcbe8;
+}
+
+/* Contenido claro */
+.graphlab-contenido {
+    background: transparent;
+}
+
+/* Tarjetas blancas */
+.graphlab-contenido .card {
+    background: #ffffff !important;
+    border-color: #dce5ec !important;
+}
+
+/* Footer azul noche */
+.graphlab-pie {
+    background: #10263e;
+    color: #bfd1df;
+    border-top: 1px solid #2d4b64;
+}

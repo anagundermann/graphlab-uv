@@ -354,8 +354,11 @@ def figura_costos(inicio):
         + [COSTO_OPTIMO or 0]
     )
     fig.update_yaxes(
-        title_text="Costo",
-        range=[0, limite + 14],
+        title_text="Costo (escala desde 80)",
+        range=[80, limite + 5],
+        tickmode="linear",
+        tick0=80,
+        dtick=5,
         gridcolor="#E9EEF2",
         zeroline=False,
         tickfont=dict(size=11),

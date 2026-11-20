@@ -848,3 +848,40 @@
         grid-template-columns: 1fr;
     }
 }
+
+/* ==========================================
+   CHRISTOFIDES · MOSTRAR PESOS
+   No afecta a otros laboratorios
+   ========================================== */
+
+.pagina-christofides .gl-ch-opciones-grafo {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+.pagina-christofides .gl-ch-switch-pesos {
+    margin: 0;
+    color: #526b7d;
+    font-size: 0.79rem;
+    white-space: nowrap;
+}
+
+.pagina-christofides .gl-ch-switch-pesos .form-check {
+    margin-bottom: 0;
+}
+
+.pagina-christofides .gl-ch-switch-pesos .form-check-input:checked {
+    background-color: #416b86;
+    border-color: #416b86;
+}
+
+@media (max-width: 540px) {
+    .pagina-christofides .gl-ch-opciones-grafo {
+        width: 100%;
+        justify-content: space-between;
+        gap: 10px;
+    }
+}

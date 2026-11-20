@@ -642,3 +642,51 @@
         transition: none;
     }
 }
+
+/* ==========================================
+   KRUSKAL · PESOS Y ESTADOS ACCESIBLES
+   Los estilos de las aristas se definen en pages/kruskal.py.
+   ========================================== */
+
+.pagina-kruskal .gl-kr-grafo-opciones {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    gap: 8px 16px;
+}
+
+.pagina-kruskal .gl-kr-grafo-opciones .gl-kr-switch {
+    margin: 0;
+}
+
+/* La leyenda utiliza la misma codificacion por trazo que el grafo. */
+.pagina-kruskal .gl-kr-leyenda .gl-kr-punto {
+    width: 19px;
+    height: 0;
+    border-radius: 0;
+    background: transparent;
+    border-top-width: 3px;
+    border-top-style: solid;
+}
+
+.pagina-kruskal .gl-kr-leyenda .gl-kr-punto-verde {
+    border-top-color: #238a80;
+}
+
+.pagina-kruskal .gl-kr-leyenda .gl-kr-punto-rojo {
+    border-top-color: #ca5962;
+    border-top-style: dashed;
+}
+
+.pagina-kruskal .gl-kr-leyenda .gl-kr-punto-gris {
+    border-top-color: #aebdcc;
+    border-top-style: dotted;
+}
+
+@media (max-width: 540px) {
+    .pagina-kruskal .gl-kr-grafo-opciones {
+        justify-content: flex-start;
+        gap: 7px 15px;
+    }
+}

@@ -127,6 +127,44 @@ def arista_visual(
     )
 
 
+def agregar_etiquetas_contextuales(elementos, etapa):
+    """Etiquetas de peso en las aristas relevantes, sin duplicar parejas.
+
+    Las aristas del matching se destacan durante la exploracion; en el
+    multigrafo y en Euler se identifica una sola vez cada pareja de vertices.
+    Los atajos nunca rotulan el AGM de referencia, que aparece atenuado.
+    """
+    elegidas = {}
+    actuales = {"euler-actual", "atajo-actual", "final-actual"}
+
+    for elemento in elementos:
+        arista = elemento.get("data", {})
+        if "source" not in arista:
+            continue
+
+        estado = arista.get("estado")
+        if estado == "guia":
+            continue
+        if etapa in ("candidato", "matching") and estado != "aux-elegida":
+            continue
+
+        pareja = frozenset((arista["source"], arista["target"]))
+        prioridad = (
+            0
+            if estado in actuales
+            else 1
+            if estado in ("aux-elegida", "matching", "atajo")
+            else 2
+        )
+        if pareja not in elegidas or prioridad < elegidas[pareja][0]:
+            elegidas[pareja] = (prioridad, elemento)
+
+    for _, elemento in elegidas.values():
+        elemento["data"]["etiqueta_peso"] = str(elemento["data"]["peso"])
+
+    return elementos
+
+
 def construir_elementos(paso, datos, candidato=None, animacion=0):
     """Usa siempre la etapa actual; nunca mezcla resultados futuros."""
     estado = datos["pasos"][paso]
@@ -181,14 +219,14 @@ def construir_elementos(paso, datos, candidato=None, animacion=0):
                 estado_arista,
                 tipo="Arista del grafo auxiliar",
             )
-        return elementos
+        return agregar_etiquetas_contextuales(elementos, etapa)
 
     if etapa in ("arbol", "impares"):
         for u, v, peso in ARISTAS_ARBOL:
             arista_visual(
                 elementos, f"arbol-{u}-{v}", u, v, peso, "arbol", tipo="Árbol mínimo"
             )
-        return elementos
+        return agregar_etiquetas_contextuales(elementos, etapa)
 
     if etapa in ("multigrafo", "euler", "seleccion"):
         recorridas = set()
@@ -235,7 +273,7 @@ def construir_elementos(paso, datos, candidato=None, animacion=0):
                 modo=modo,
                 sentido=sentido,
             )
-        return elementos
+        return agregar_etiquetas_contextuales(elementos, etapa)
 
     if etapa == "atajo":
         # Guía gris tenue del AGM; superpuesto, únicamente el recorrido vigente.
@@ -282,7 +320,7 @@ def construir_elementos(paso, datos, candidato=None, animacion=0):
                     tipo="Recorrido pendiente de atajo",
                     modo=modo,
                 )
-        return elementos
+        return agregar_etiquetas_contextuales(elementos, etapa)
 
     if etapa == "final":
         total = min(animacion, len(datos["circuito"]) - 1)
@@ -298,7 +336,7 @@ def construir_elementos(paso, datos, candidato=None, animacion=0):
                 "final-actual" if i == total - 1 else "final",
                 tipo="Ciclo hamiltoniano",
             )
-    return elementos
+    return agregar_etiquetas_contextuales(elementos, etapa)
 
 
 ESTILO_GRAFO = [
@@ -402,6 +440,7 @@ ESTILO_GRAFO = [
         "style": {
             "width": 3.5,
             "line-color": "#c58a35",
+            "line-style": "dashed",
             "opacity": 0.85,
         },
     },
@@ -481,6 +520,27 @@ ESTILO_GRAFO = [
             "target-arrow-shape": "triangle",
             "target-arrow-color": "#275b7c",
             "arrow-scale": 1.05,
+        },
+    },
+]
+
+
+ESTILO_PESOS = [
+    {
+        "selector": "edge[etiqueta_peso]",
+        "style": {
+            "label": "data(etiqueta_peso)",
+            "color": "#294d67",
+            "font-size": 12,
+            "font-weight": 700,
+            "text-rotation": "none",
+            "text-background-color": "#ffffff",
+            "text-background-opacity": 0.96,
+            "text-background-shape": "round-rectangle",
+            "text-background-padding": "3px",
+            "text-border-width": 1,
+            "text-border-color": "#dce5ec",
+            "text-border-opacity": 0.9,
         },
     },
 ]
@@ -978,28 +1038,45 @@ def crear_pagina(paso_inicial=0, inicio_inicial="a"):
                                         [
                                             html.H3("Transformación del grafo"),
                                             html.P(
-                                                "Posiciones fijas · pasa el cursor sobre una arista para consultar su peso."
+                                                "Las posiciones de los vértices no cambian."
                                             ),
                                         ]
                                     ),
                                     html.Div(
                                         [
-                                            html.Label(
-                                                "Vértice inicial",
-                                                htmlFor="christofides-inicio",
-                                            ),
-                                            dcc.Dropdown(
-                                                id="christofides-inicio",
+                                            dbc.Checklist(
+                                                id="christofides-mostrar-pesos",
                                                 options=[
-                                                    {"label": v, "value": v}
-                                                    for v in VERTICES
+                                                    {
+                                                        "label": "Mostrar pesos",
+                                                        "value": "mostrar",
+                                                    }
                                                 ],
-                                                value=inicio_inicial,
-                                                clearable=False,
-                                                searchable=False,
+                                                value=[],
+                                                switch=True,
+                                                className="gl-ch-switch-pesos",
+                                            ),
+                                            html.Div(
+                                                [
+                                                    html.Label(
+                                                        "Vértice inicial",
+                                                        htmlFor="christofides-inicio",
+                                                    ),
+                                                    dcc.Dropdown(
+                                                        id="christofides-inicio",
+                                                        options=[
+                                                            {"label": v, "value": v}
+                                                            for v in VERTICES
+                                                        ],
+                                                        value=inicio_inicial,
+                                                        clearable=False,
+                                                        searchable=False,
+                                                    ),
+                                                ],
+                                                className="gl-ch-selector",
                                             ),
                                         ],
-                                        className="gl-ch-selector",
+                                        className="gl-ch-opciones-grafo",
                                     ),
                                 ],
                                 className="gl-ch-grafo-cabecera",
@@ -1062,27 +1139,27 @@ def crear_pagina(paso_inicial=0, inicio_inicial="a"):
                                     html.Div(
                                         [
                                             dbc.Button(
-                                                "Anterior",
+                                                "← Anterior",
                                                 id="christofides-anterior",
                                                 n_clicks=0,
                                                 color="outline-secondary",
                                                 disabled=(paso_inicial == 0),
                                             ),
                                             dbc.Button(
-                                                "Siguiente",
+                                                "→ Siguiente",
                                                 id="christofides-siguiente",
                                                 n_clicks=0,
                                                 color="primary",
                                                 disabled=(paso_inicial == ultimo),
                                             ),
                                             dbc.Button(
-                                                "Reiniciar",
+                                                "↻ Reiniciar",
                                                 id="christofides-reiniciar",
                                                 n_clicks=0,
                                                 color="outline-secondary",
                                             ),
                                             dbc.Button(
-                                                "Reproducir ciclo",
+                                                "▶ Reproducir ciclo",
                                                 id="christofides-reproducir",
                                                 n_clicks=0,
                                                 color="outline-primary",
@@ -1334,3 +1411,13 @@ def registrar_callbacks(app):
                 className="gl-ch-tooltip-fila",
             ),
         ], "gl-ch-tooltip-arista gl-ch-tooltip-visible"
+
+    @app.callback(
+        Output("christofides-grafo", "stylesheet"),
+        Input("christofides-mostrar-pesos", "value"),
+    )
+    def alternar_pesos(mostrar):
+        """Cambia solo el estilo, no el paso ni los elementos del grafo."""
+        if "mostrar" in (mostrar or []):
+            return ESTILO_GRAFO + ESTILO_PESOS
+        return ESTILO_GRAFO

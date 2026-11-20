@@ -127,6 +127,33 @@ def agregar_arista(
     )
 
 
+def agregar_etiquetas_contextuales(elementos):
+    """Una etiqueta por pareja de vertices, priorizando la arista actual."""
+    elegidas = {}
+    estados_actuales = {"copia_actual", "atajo_actual", "circuito_actual"}
+
+    for elemento in elementos:
+        datos_arista = elemento.get("data", {})
+        if "source" not in datos_arista or datos_arista.get("estado") == "guia":
+            continue
+
+        pareja = frozenset((datos_arista["source"], datos_arista["target"]))
+        prioridad = (
+            0
+            if datos_arista.get("estado") in estados_actuales
+            else 1
+            if datos_arista.get("copia") == 1
+            else 2
+        )
+        if pareja not in elegidas or prioridad < elegidas[pareja][0]:
+            elegidas[pareja] = (prioridad, elemento)
+
+    for _, elemento in elegidas.values():
+        elemento["data"]["etiqueta_peso"] = str(elemento["data"]["peso"])
+
+    return elementos
+
+
 def construir_elementos(paso, datos, animacion=0):
     """Grafo con posiciones fijas y transformacion estrictamente progresiva."""
     etapa_actual = datos["pasos"][paso]
@@ -253,7 +280,7 @@ def construir_elementos(paso, datos, animacion=0):
                 tipo="Ciclo hamiltoniano",
             )
 
-    return elementos
+    return agregar_etiquetas_contextuales(elementos)
 
 
 ESTILO_GRAFO = [
@@ -321,6 +348,7 @@ ESTILO_GRAFO = [
             "line-color": "#c58a35",
             "width": 3.5,
             "opacity": 0.84,
+            "line-style": "dashed",
         },
     },
     {
@@ -405,6 +433,26 @@ ESTILO_GRAFO = [
             "target-arrow-shape": "triangle",
             "target-arrow-color": "#275b7c",
             "arrow-scale": 1.05,
+        },
+    },
+]
+
+ESTILO_PESOS = [
+    {
+        "selector": "edge[etiqueta_peso]",
+        "style": {
+            "label": "data(etiqueta_peso)",
+            "color": "#294d67",
+            "font-size": 12,
+            "font-weight": 700,
+            "text-rotation": "none",
+            "text-background-color": "#ffffff",
+            "text-background-opacity": 0.96,
+            "text-background-shape": "round-rectangle",
+            "text-background-padding": "3px",
+            "text-border-width": 1,
+            "text-border-color": "#dce5ec",
+            "text-border-opacity": 0.9,
         },
     },
 ]
@@ -776,22 +824,39 @@ def crear_pagina(paso_inicial=0, inicio_inicial="a"):
                                     ),
                                     html.Div(
                                         [
-                                            html.Label(
-                                                "Vértice inicial",
-                                                htmlFor="doble-inicio",
-                                            ),
-                                            dcc.Dropdown(
-                                                id="doble-inicio",
+                                            dbc.Checklist(
+                                                id="doble-mostrar-pesos",
                                                 options=[
-                                                    {"label": v, "value": v}
-                                                    for v in VERTICES
+                                                    {
+                                                        "label": "Mostrar pesos",
+                                                        "value": "mostrar",
+                                                    }
                                                 ],
-                                                value=inicio_inicial,
-                                                searchable=False,
-                                                clearable=False,
+                                                value=[],
+                                                switch=True,
+                                                className="gl-da-switch-pesos",
+                                            ),
+                                            html.Div(
+                                                [
+                                                    html.Label(
+                                                        "Vértice inicial",
+                                                        htmlFor="doble-inicio",
+                                                    ),
+                                                    dcc.Dropdown(
+                                                        id="doble-inicio",
+                                                        options=[
+                                                            {"label": v, "value": v}
+                                                            for v in VERTICES
+                                                        ],
+                                                        value=inicio_inicial,
+                                                        searchable=False,
+                                                        clearable=False,
+                                                    ),
+                                                ],
+                                                className="gl-da-selector",
                                             ),
                                         ],
-                                        className="gl-da-selector",
+                                        className="gl-da-opciones-grafo",
                                     ),
                                 ],
                                 className="gl-da-grafo-cabecera",
@@ -855,27 +920,27 @@ def crear_pagina(paso_inicial=0, inicio_inicial="a"):
                                     html.Div(
                                         [
                                             dbc.Button(
-                                                "Anterior",
+                                                "← Anterior",
                                                 id="doble-anterior",
                                                 n_clicks=0,
                                                 color="outline-secondary",
                                                 disabled=(paso_inicial == 0),
                                             ),
                                             dbc.Button(
-                                                "Siguiente",
+                                                "→ Siguiente",
                                                 id="doble-siguiente",
                                                 n_clicks=0,
                                                 color="primary",
                                                 disabled=(paso_inicial == ultimo),
                                             ),
                                             dbc.Button(
-                                                "Reiniciar",
+                                                "↻ Reiniciar",
                                                 id="doble-reiniciar",
                                                 n_clicks=0,
                                                 color="outline-secondary",
                                             ),
                                             dbc.Button(
-                                                "Reproducir ciclo",
+                                                "▶ Reproducir ciclo",
                                                 id="doble-reproducir",
                                                 n_clicks=0,
                                                 color="outline-primary",
@@ -1040,3 +1105,12 @@ def registrar_callbacks(app):
             ),
         ]
         return contenido, "gl-da-tooltip-arista gl-da-tooltip-visible"
+
+    @app.callback(
+        Output("doble-grafo", "stylesheet"),
+        Input("doble-mostrar-pesos", "value"),
+    )
+    def alternar_pesos(mostrar):
+        if "mostrar" in (mostrar or []):
+            return ESTILO_GRAFO + ESTILO_PESOS
+        return ESTILO_GRAFO

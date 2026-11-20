@@ -650,3 +650,39 @@
         transition: none;
     }
 }
+
+/* ==========================================
+   DOBLE ARBOL · INTERRUPTOR DE PESOS
+   ========================================== */
+
+.pagina-doble-arbol .gl-da-opciones-grafo {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+.pagina-doble-arbol .gl-da-switch-pesos {
+    margin: 0;
+    color: #526b7d;
+    font-size: 0.79rem;
+    white-space: nowrap;
+}
+
+.pagina-doble-arbol .gl-da-switch-pesos .form-check {
+    margin-bottom: 0;
+}
+
+.pagina-doble-arbol .gl-da-switch-pesos .form-check-input:checked {
+    background-color: #416b86;
+    border-color: #416b86;
+}
+
+@media (max-width: 540px) {
+    .pagina-doble-arbol .gl-da-opciones-grafo {
+        width: 100%;
+        justify-content: space-between;
+        gap: 10px;
+    }
+}

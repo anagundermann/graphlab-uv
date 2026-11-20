@@ -145,17 +145,17 @@ def crear_pagina(algoritmo="kruskal"):
                             html.Div(
                                 [
                                     dbc.Button(
-                                        "Anterior",
+                                        "← Anterior",
                                         id="codigo-anterior",
                                         color="outline-secondary",
                                     ),
                                     dbc.Button(
-                                        "Siguiente",
+                                        "→ Siguiente",
                                         id="codigo-siguiente",
                                         color="primary",
                                     ),
                                     dbc.Button(
-                                        "Reiniciar",
+                                        "↻ Reiniciar",
                                         id="codigo-reiniciar",
                                         color="outline-secondary",
                                     ),
