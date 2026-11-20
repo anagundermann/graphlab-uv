@@ -1,5 +1,7 @@
 """Explorador de código fuente: archivos reales de models y guía sincronizada."""
 
+import re
+
 from dash import html, dcc, Input, Output, State, ctx, no_update
 import dash_bootstrap_components as dbc
 
@@ -211,6 +213,42 @@ def crear_lineas(codigo, marcas):
     ]
 
 
+def resaltar_python_en_texto(texto):
+    """Resaltar solo referencias a Python delimitadas por acentos graves.
+
+    Se reutilizan las clases del tokenizador del editor. Los fragmentos
+    normales siguen siendo texto y los marcadores no se muestran al usuario.
+    """
+    if not isinstance(texto, str) or "`" not in texto:
+        return texto
+
+    partes = re.split(r"(`[^`\n]+`)", texto)
+    resultado = []
+    for parte in partes:
+        if not (parte.startswith("`") and parte.endswith("`")):
+            if parte:
+                resultado.append(parte)
+            continue
+
+        referencia = parte[1:-1]
+        tokens = fragmentos_coloreados(referencia)[0]
+        trozos = []
+        for i, (fragmento, clase) in enumerate(tokens):
+            siguiente = next(
+                (texto_sig for texto_sig, _ in tokens[i + 1 :] if texto_sig.strip()),
+                "",
+            )
+            if clase == "gl-tk-neutro" and (
+                fragmento == "Counter"
+                or (fragmento.isidentifier() and siguiente == "(")
+            ):
+                clase = "gl-tk-funcion"
+            trozos.append(html.Span(fragmento, className=clase))
+
+        resultado.append(html.Code(trozos, className="gl-codigo-inline-python"))
+    return resultado
+
+
 def actualizar_progreso(memoria, algoritmo, paso, inicio="a"):
     """Actualizar inmutablemente solo el algoritmo seleccionado."""
     memoria = dict(memoria or {})
@@ -253,8 +291,8 @@ def registrar_callbacks(app):
             f"Paso {datos['paso']} de {datos['total']} · {datos['etapa']}",
             {"width": f"{100 * datos['paso'] / max(1, datos['total']):.1f}%"},
             datos["titulo"],
-            datos["explicacion"],
-            datos["aplicacion"],
+            resaltar_python_en_texto(datos["explicacion"]),
+            resaltar_python_en_texto(datos["aplicacion"]),
             datos["paso"] == 0,
             datos["paso"] == datos["total"],
             f"{algoritmo}:{datos['paso']}:{linea_principal}",

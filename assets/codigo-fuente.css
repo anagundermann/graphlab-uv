@@ -274,6 +274,22 @@
     margin: 0;
 }
 
+/* Fragmentos Python dentro de las explicaciones de Ejecucion guiada.
+   Reutilizan los colores del editor, sobre un fondo oscuro para mantener
+   el contraste sin colorear el texto explicativo en espanol. */
+.pagina-codigo-fuente .gl-codigo-inline-python {
+    display: inline-block;
+    vertical-align: baseline;
+    margin: 0 .08em;
+    padding: .06em .35em;
+    border-radius: 5px;
+    border: 1px solid #3c5267;
+    background: #203449;
+    color: #e0e8f1;
+    font: 600 .90em/1.35 "Cascadia Code", "Fira Code", "Consolas", monospace;
+    white-space: nowrap;
+}
+
 .gl-codigo-aplicacion-panel {
     background: #eef6f5;
     border: 1px solid #cce4df;
