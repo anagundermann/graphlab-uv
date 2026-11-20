@@ -445,3 +445,25 @@
     outline-offset: 4px;
     border-radius: 3px;
 }
+
+/* ==========================================
+   GRAPHLAB UV · SCROLL SIN BARRA VISIBLE
+   ========================================== */
+
+/* Firefox */
+html,
+body {
+    scrollbar-width: none;
+}
+
+/* Chrome, Edge y Safari */
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+    display: none;
+}
+
+/* Mantener desplazamiento vertical */
+html,
+body {
+    overflow-y: auto;
+}

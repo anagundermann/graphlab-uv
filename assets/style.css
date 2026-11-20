@@ -95,8 +95,8 @@ body {
     border-radius: 9px;
     color: #546b7d;
     padding: 10px 15px;
-    font-size: .91rem;
-    font-weight: 650;
+    font-size: .86rem;
+    font-weight: 600;
     cursor: pointer;
     transition: background 150ms ease, border-color 150ms ease, color 150ms ease;
 }
@@ -290,4 +290,110 @@ body,
     background: #10263e;
     color: #bfd1df;
     border-top: 1px solid #2d4b64;
+}
+
+/* ==========================================
+   GRAPHLAB UV · BIBLIOTECA A LA DERECHA
+   ========================================== */
+
+.graphlab-navegacion>.graphlab-nav-boton:last-child {
+    margin-left: auto;
+    white-space: nowrap;
+}
+
+/* ==========================================
+   GRAPHLAB UV · HEADER LINEAL Y COMPACTO
+   Misma altura en todas las paginas: 48 px.
+   Las clases propias evitan el ocultamiento de subtitulos
+   definido en las paginas individuales de algoritmos.
+   ========================================== */
+
+body .graphlab-app:has(.graphlab-marca-lineal) .graphlab-encabezado {
+    height: 48px;
+    min-height: 48px;
+    padding: 0 clamp(20px, 3vw, 54px);
+    display: flex;
+    align-items: center;
+    flex-wrap: nowrap;
+    overflow: hidden;
+}
+
+.graphlab-app .graphlab-marca-lineal {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 0;
+    width: 100%;
+    white-space: nowrap;
+}
+
+.graphlab-app .graphlab-encabezado .graphlab-marca-lineal .graphlab-titulo {
+    margin: 0;
+    color: #ffffff;
+    font-size: 1.30rem;
+    font-weight: 800;
+    line-height: 1.2;
+    flex: 0 0 auto;
+}
+
+.graphlab-app .graphlab-header-punto {
+    color: #789bb1;
+    font-weight: 700;
+    font-size: 0.8rem;
+    flex: 0 0 auto;
+}
+
+/* El nombre del proyecto queda solo a la izquierda. */
+.graphlab-app .graphlab-header-punto-uv {
+    display: none;
+}
+
+.graphlab-app .graphlab-header-universidad {
+    margin-left: auto;
+    color: #a9cbdf;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0;
+    flex: 0 0 auto;
+}
+
+.graphlab-app .graphlab-header-descripcion {
+    color: #c1d2df;
+    font-size: 0.76rem;
+    font-weight: 400;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Conserva una sola linea sin desbordes en pantallas menores. */
+@media (max-width: 1030px) {
+
+    .graphlab-app .graphlab-header-punto-descripcion,
+    .graphlab-app .graphlab-header-descripcion {
+        display: none;
+    }
+}
+
+@media (max-width: 560px) {
+
+    .graphlab-app .graphlab-header-punto-uv,
+    .graphlab-app .graphlab-header-universidad {
+        display: none;
+    }
+}
+
+/* ==========================================
+   GRAPHLAB UV · NAVEGACION UNIFORME
+   Misma altura en todas las paginas
+   ========================================== */
+
+.graphlab-app .graphlab-navegacion {
+    padding: 6px clamp(20px, 3vw, 54px) !important;
+    align-items: center;
+}
+
+.graphlab-app .graphlab-nav-boton {
+    padding: 8px 15px !important;
+    line-height: 1.25;
 }

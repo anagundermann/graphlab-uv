@@ -891,11 +891,6 @@ def crear_pagina(paso_inicial=0, inicio_inicial="a"):
                                 id="doble-leyenda",
                                 className="gl-da-leyenda",
                             ),
-                            html.P(
-                                "Pasa el cursor sobre una arista para consultar su peso "
-                                "y, cuando corresponda, el número de copia.",
-                                className="gl-da-ayuda",
-                            ),
                             html.Div(
                                 [
                                     html.Div(

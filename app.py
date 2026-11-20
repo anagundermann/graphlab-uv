@@ -24,7 +24,7 @@ app = dash.Dash(
     external_stylesheets=[dbc.themes.BOOTSTRAP],
     suppress_callback_exceptions=True,
 )
-app.title = "GraphLab UV · Optimización combinatoria"
+app.title = "GraphLab UV · Optimización combinatorial"
 server = app.server
 
 SECCIONES = [
@@ -34,6 +34,7 @@ SECCIONES = [
     ("christofides", "Christofides"),
     ("comparacion", "Comparación"),
     ("codigo", "Código Python"),
+    ("biblioteca", "Biblioteca matemática ↗"),
 ]
 PAGINAS = {
     "explorador": fundamentos,
@@ -75,23 +76,27 @@ app.layout = html.Div(
             children=[
                 html.Div(
                     [
-                        html.Span(
-                            "UNIVERSIDAD DE VALPARAÍSO · LABORATORIO INTERACTIVO",
-                            className="graphlab-sobretitulo",
-                        ),
                         html.H1("GraphLab UV", className="graphlab-titulo"),
+                        html.Span(
+                            "·",
+                            className="graphlab-header-punto graphlab-header-punto-uv",
+                            **{"aria-hidden": "true"},
+                        ),
+                        html.Span(
+                            "Universidad de Valparaíso",
+                            className="graphlab-header-universidad",
+                        ),
+                        html.Span(
+                            "·",
+                            className="graphlab-header-punto graphlab-header-punto-descripcion",
+                            **{"aria-hidden": "true"},
+                        ),
+                        html.Span(
+                            "Optimización combinatorial",
+                            className="graphlab-header-descripcion",
+                        ),
                     ],
-                    className="graphlab-marca",
-                ),
-                html.Div(
-                    html.Button(
-                        "Biblioteca matemática  ↗",
-                        id={"type": "graphlab-nav", "index": "biblioteca"},
-                        type="button",
-                        n_clicks=0,
-                        className="gl-bib-boton-encabezado",
-                    ),
-                    className="graphlab-conceptos",
+                    className="graphlab-marca-lineal",
                 ),
             ],
         ),
@@ -103,7 +108,7 @@ app.layout = html.Div(
         html.Main(id="contenido_pagina", className="graphlab-contenido"),
         html.Footer(
             [
-                html.Span("GraphLab UV · Optimización combinatoria"),
+                html.Span("GraphLab UV · Optimización combinatorial"),
                 html.Span("Ana Gundermann · 2026"),
             ],
             className="graphlab-pie",
